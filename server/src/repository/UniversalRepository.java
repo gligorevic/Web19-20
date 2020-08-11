@@ -15,7 +15,7 @@ public class UniversalRepository<E extends iIdentifiable<ID>,ID> implements iRep
 		this.stream = stream;
 		this.idGenerator = idGenerator;
 	}
-
+	
 	@Override
 	public E findById(ID id) {
 		return stream.readAll().stream().filter(e -> e.getId().equals(id)).findFirst().orElse(null);
@@ -49,6 +49,11 @@ public class UniversalRepository<E extends iIdentifiable<ID>,ID> implements iRep
 		List<E> entities = stream.readAll();
 		entities.remove(entity);
 		stream.saveAll(entities);
+	}
+
+	@Override
+	public void logicalDelete(E entity) {
+		entity.setDeleted(true);
 	}
 
 }

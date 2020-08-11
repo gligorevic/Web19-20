@@ -10,4 +10,5 @@ public interface iRepository<E extends iIdentifiable<ID>,ID>  {
 	E save(E entity);
 	void update(E entity);
 	void delete(E entity);
+	void logicalDelete(E entity);
 }
