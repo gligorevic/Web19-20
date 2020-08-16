@@ -19,7 +19,6 @@ public class UserService {
 	}
 	
 	public List<User> findAll() {
-		System.out.println("pozivam ovde");
 		return userRepository.findAll();
 	}
 	
