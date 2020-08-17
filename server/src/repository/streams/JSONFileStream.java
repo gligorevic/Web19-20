@@ -6,9 +6,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.type.CollectionType;
 import org.codehaus.jackson.type.TypeReference;
 
 import repository.interfaces.iStream;
@@ -17,10 +19,12 @@ public class JSONFileStream<E> implements iStream<E> {
 	private ObjectMapper objectMapper;
 	private String filePath;
 	private final String DB_PREFIX = "DB/";
+	private Class<E> type;
 	
-	public JSONFileStream(String filePath) {
+	public JSONFileStream(String filePath, Class<E> type) {
 		this.filePath = filePath;
 		this.objectMapper = new ObjectMapper();
+		this.type = type;
 	}
 
 	@Override
@@ -43,14 +47,19 @@ public class JSONFileStream<E> implements iStream<E> {
 	@Override
 	public List<E> readAll() {
 		try {
-			System.out.println(readTextFromFile());
-			return objectMapper.readValue(readTextFromFile(), new TypeReference<List<E>>() {});
+			return jsonArrayToObjectList(readTextFromFile(), type);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
+	public <T> List<T> jsonArrayToObjectList(String json, Class<T> tClass) throws IOException {	    
+	    CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, tClass);
+	    List<T> ts = objectMapper.readValue(json, listType);
+	    return ts;
+	}
+	
 	@Override
 	public void appendToFile(E entity) {
 		List<E> allEntities = readAll();

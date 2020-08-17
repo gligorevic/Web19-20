@@ -1,6 +1,7 @@
 package domain;
 
 import domain.interfaces.iIdentifiable;
+import dto.UserDTO;
 
 enum Role {
 	ADMIN, HOST, GUEST
@@ -16,6 +17,31 @@ public class User implements iIdentifiable<Long> {
 		
 	private Boolean deleted = false;
 	
+	public User() {
+	}
+
+	public User(Long id, String username, String password, String name, String lastName, Gender gender,
+			Boolean deleted) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.name = name;
+		this.lastName = lastName;
+		this.gender = gender;
+		this.deleted = deleted;
+	}
+
+
+
+	public User(UserDTO newUser) {
+		this.username = newUser.getUsername();
+		this.password = newUser.getPassword();
+		this.name = newUser.getName();
+		this.lastName = newUser.getLastName();
+		this.gender = newUser.getGender();
+	}
+
 	@Override
 	public Long getId() {
 		return id;

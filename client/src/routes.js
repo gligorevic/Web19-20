@@ -1,5 +1,6 @@
 import Home from "./components/Apartment/Home.vue";
 import Profile from "./components/User/Profile.vue";
+import Registration from "./components/User/Registration.vue";
 
 export const routes = [
   {
@@ -10,5 +11,9 @@ export const routes = [
   {
     path: "/user",
     component: Profile,
+  },
+  {
+    path: "/register",
+    component: Registration,
   },
 ];
