@@ -16,7 +16,6 @@ public class UserRepository extends UniversalRepository<User, Long> implements i
 
 	public User findByUsername(String username) {
 		List<User> users = new ArrayList<User>(findAll());
-		System.out.println(users.get(0).getClass().getName());
 		for (User user : users)
 			if(username.equals(user.getUsername())) return user;
 	

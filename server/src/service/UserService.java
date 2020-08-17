@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import domain.User;
 import dto.UserDTO;
 import exception.CustomException;
@@ -28,6 +29,7 @@ public class UserService {
 
 	public UserDTO register(UserDTO newUser) throws CustomException {
 		if(userRepository.findByUsername(newUser.getUsername()) != null) throw new CustomException(Status.BAD_REQUEST);
+		newUser.setPassword(new String(BCrypt.withDefaults().hashToChar(12, newUser.getPassword().toCharArray())));
 		userRepository.save(new User(newUser));
 		
 		return newUser;

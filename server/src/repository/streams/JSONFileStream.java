@@ -47,6 +47,7 @@ public class JSONFileStream<E> implements iStream<E> {
 	@Override
 	public List<E> readAll() {
 		try {
+			System.out.println(readTextFromFile());
 			return jsonArrayToObjectList(readTextFromFile(), type);
 		} catch (Exception e) {
 			e.printStackTrace();
