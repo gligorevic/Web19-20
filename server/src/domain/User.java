@@ -3,10 +3,6 @@ package domain;
 import domain.interfaces.iIdentifiable;
 import dto.UserDTO;
 
-enum Role {
-	ADMIN, HOST, GUEST
-}
-
 public class User implements iIdentifiable<Long> {
 	private Long id;
 	private String username;
@@ -14,14 +10,14 @@ public class User implements iIdentifiable<Long> {
 	private String name;
 	private String lastName;
 	private Gender gender;
-		
+	private Role role;
 	private Boolean deleted = false;
 	
 	public User() {
 	}
 
 	public User(Long id, String username, String password, String name, String lastName, Gender gender,
-			Boolean deleted) {
+			Boolean deleted, Role role) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -30,6 +26,7 @@ public class User implements iIdentifiable<Long> {
 		this.lastName = lastName;
 		this.gender = gender;
 		this.deleted = deleted;
+		this.role = role;
 	}
 
 
@@ -40,6 +37,7 @@ public class User implements iIdentifiable<Long> {
 		this.name = newUser.getName();
 		this.lastName = newUser.getLastName();
 		this.gender = newUser.getGender();
+		this.role = newUser.getRole();
 	}
 
 	@Override
@@ -100,5 +98,14 @@ public class User implements iIdentifiable<Long> {
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
 	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+	
 
 }

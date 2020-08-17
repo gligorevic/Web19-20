@@ -1,6 +1,8 @@
 import Home from "./components/Apartment/Home.vue";
 import Profile from "./components/User/Profile.vue";
 import Registration from "./components/User/Registration.vue";
+import Login from "./components/User/Login.vue";
+import { eventBus } from "./main";
 
 export const routes = [
   {
@@ -15,5 +17,23 @@ export const routes = [
   {
     path: "/register",
     component: Registration,
+    beforeEnter: (to, from, next) => {
+      console.log(eventBus);
+      if (eventBus.isUserLoggedIn) {
+        next("/");
+      }
+      next();
+    },
+  },
+  {
+    path: "/login",
+    component: Login,
+    beforeEnter: (to, from, next) => {
+      console.log(eventBus);
+      if (eventBus.isUserLoggedIn) {
+        next("/");
+      }
+      next();
+    },
   },
 ];

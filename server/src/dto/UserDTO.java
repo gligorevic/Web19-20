@@ -1,6 +1,7 @@
 package dto;
 
 import domain.Gender;
+import domain.Role;
 
 public class UserDTO {
 	private String username;
@@ -8,11 +9,10 @@ public class UserDTO {
 	private String name;
 	private String lastName;
 	private Gender gender;
+	private Role role = Role.GUEST;
 	
 	public UserDTO() {
 	}
-	
-	
 	
 	public UserDTO(String username, String password, String name, String lastName, Gender gender) {
 		this.username = username;
@@ -55,7 +55,15 @@ public class UserDTO {
 		this.gender = gender;
 	}
 
+	
 
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
 
 	@Override
 	public String toString() {

@@ -32,15 +32,32 @@ public class UserController {
 	public Response register(UserDTO newUser) {
 		try {
 			if(!hasRequiredFields(newUser)) return Response.status(Status.BAD_REQUEST).entity("All fields must be filled out.").build();
-			userService.register(newUser);		
+			return Response.ok().entity(userService.register(newUser)).build();		
 		} catch(CustomException e){
 			return Response.status(Status.BAD_REQUEST).entity("User with given username already exists.").build();
 		} catch(Exception e){
 			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		}
-		return Response.ok(newUser).build();
+		
 	}
 
+	
+	@POST
+	@Path("/login")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response register(LoginDTO authData) {
+		try {
+			return Response.ok().entity(userService.login(authData)).build();		
+		} catch(CustomException e){
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		} catch(Exception e){
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+		
+	}
+	
 	private boolean hasRequiredFields(UserDTO newUser) {
 		if(newUser.getUsername().isEmpty() || newUser.getPassword().isEmpty() || newUser.getName().isEmpty() || newUser.getLastName().isEmpty()) 
 			return false;	
