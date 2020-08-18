@@ -21,6 +21,9 @@ export const eventBus = new Vue({
       }
       this.$emit("loggedInChanged");
     },
+    showMessage: function(msgObject) {
+      this.$emit("showMessage", msgObject);
+    },
   },
 });
 

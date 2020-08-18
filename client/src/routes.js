@@ -13,12 +13,17 @@ export const routes = [
   {
     path: "/user",
     component: Profile,
+    beforeEnter: (to, from, next) => {
+      if (!eventBus.isUserLoggedIn) {
+        next("/");
+      }
+      next();
+    },
   },
   {
     path: "/register",
     component: Registration,
     beforeEnter: (to, from, next) => {
-      console.log(eventBus);
       if (eventBus.isUserLoggedIn) {
         next("/");
       }
@@ -29,7 +34,6 @@ export const routes = [
     path: "/login",
     component: Login,
     beforeEnter: (to, from, next) => {
-      console.log(eventBus);
       if (eventBus.isUserLoggedIn) {
         next("/");
       }

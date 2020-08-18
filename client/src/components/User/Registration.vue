@@ -16,8 +16,19 @@
 
         <div class="row">
           <div class="input-field col s12">
-            <input id="email" type="email" class="validate" v-model="user.username" />
+            <input
+              id="email"
+              type="email"
+              :class="{valid: user.username !== triedUsername && user.username.length > 0, invalid: user.username === triedUsername && user.username.length > 0}"
+              v-model="user.username"
+            />
             <label for="email">Username</label>
+            <span
+              class="helper-text"
+              data-error="wrong"
+              data-success="right"
+              v-if="user.username === triedUsername && user.username.length > 0"
+            >User with {{triedUsername}} already exists.</span>
           </div>
         </div>
         <div class="row">
@@ -44,7 +55,7 @@
               class="helper-text"
               data-error="wrong"
               data-success="right"
-              v-if="!isPasswordCorrect"
+              v-if="showPasswordNotCorrectMessage"
             >Passwords must match.</span>
           </div>
         </div>
@@ -94,6 +105,7 @@ export default {
         gender: "MALE",
       },
       repeatedPassword: "",
+      triedUsername: "",
     };
   },
   methods: {
@@ -105,9 +117,14 @@ export default {
         });
         localStorage.setItem("jwt", res.data);
         eventBus.setUserLoggedIn(true);
+        eventBus.showMessage({
+          message: "You have been successfully registrated!",
+          type: "success",
+        });
         this.$router.push("/");
       } catch (error) {
-        console.log(error.response);
+        eventBus.showMessage({ message: error?.response?.data, type: "error" });
+        this.triedUsername = this.user.username;
       }
     },
   },
@@ -125,6 +142,13 @@ export default {
       return (
         this.user.password === this.repeatedPassword &&
         this.user.password.length > 0
+      );
+    },
+    showPasswordNotCorrectMessage() {
+      return (
+        this.user.password !== this.repeatedPassword &&
+        this.user.password.length > 0 &&
+        this.repeatedPassword.length > 0
       );
     },
   },

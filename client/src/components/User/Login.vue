@@ -5,15 +5,33 @@
       <form class="col s12">
         <div class="row">
           <div class="input-field col s12">
-            <input id="email" type="email" class="validate" v-model="user.username" />
+            <input
+              id="email"
+              type="email"
+              class="validate"
+              :class="{invalid: JSON.stringify(user) === JSON.stringify(triedUser)}"
+              v-model="user.username"
+            />
             <label for="email">Username</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s12">
-            <input id="password" type="password" class="validate" v-model="user.password" />
+            <input
+              id="password"
+              type="password"
+              class="validate"
+              :class="{invalid: JSON.stringify(user) === JSON.stringify(triedUser)}"
+              v-model="user.password"
+            />
             <label for="password">Password</label>
           </div>
+          <span
+            class="helper-text"
+            data-error="wrong"
+            data-success="right"
+            v-if="JSON.stringify(user) === JSON.stringify(triedUser)"
+          >Bad credentials!</span>
         </div>
 
         <div class="row">
@@ -37,6 +55,7 @@ export default {
         username: "",
         password: "",
       },
+      triedUser: {},
     };
   },
   methods: {
@@ -51,7 +70,11 @@ export default {
         eventBus.setUserLoggedIn(true);
         this.$router.push("/");
       } catch (error) {
-        console.log(error.response);
+        eventBus.showMessage({
+          message: "Bad credentials! Check your username or password.",
+          type: "error",
+        });
+        this.triedUser = { ...this.user };
       }
     },
   },
