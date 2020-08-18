@@ -10,17 +10,18 @@
           <a>Home</a>
         </router-link>
 
-        <router-link to="/user" tag="li" active-class="active" v-if="isUserLoggedIn">
+        <router-link to="/user" tag="li" active-class="active" exact v-if="isUserLoggedIn">
           <a>Profile</a>
         </router-link>
+
         <li v-if="isUserLoggedIn">
           <a href="#" @click="logout">Logout</a>
         </li>
         <template v-else>
-          <router-link to="/login" tag="li" active-class="active">
+          <router-link to="/login" tag="li" active-class="active" exact>
             <a>Login</a>
           </router-link>
-          <router-link to="/register" tag="li" active-class="active">
+          <router-link to="/register" tag="li" active-class="active" exact>
             <a>Register</a>
           </router-link>
         </template>

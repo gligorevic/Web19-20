@@ -37,6 +37,16 @@ const router = new VueRouter({
   mode: "history",
 });
 
+router.beforeEach((to, from, next) => {
+  if (to.meta.auth && !eventBus.isUserLoggedIn) {
+    next("/login");
+  } else if (to.meta.loggedOut && eventBus.isUserLoggedIn) {
+    next("/");
+  } else {
+    next();
+  }
+});
+
 new Vue({
   router,
   render: (h) => h(App),
