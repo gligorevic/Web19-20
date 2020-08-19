@@ -3,8 +3,11 @@ package controller;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,62 +24,95 @@ import service.UserService;
 public class UserController {
 	@Inject
 	private UserService userService;
-	
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String test() {		
+	public String test() {
 		return userService.findAll().toString();
 	}
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response register(UserDTO newUser) {
 		try {
-			if(!hasRequiredFields(newUser)) return Response.status(Status.BAD_REQUEST).entity("All fields must be filled out.").build();
-			return Response.ok().entity(userService.register(newUser)).build();		
-		} catch(CustomException e){
+			if (!hasRequiredFields(newUser))
+				return Response.status(Status.BAD_REQUEST).entity("All fields must be filled out.").build();
+			return Response.ok().entity(userService.register(newUser)).build();
+		} catch (CustomException e) {
 			return Response.status(Status.BAD_REQUEST).entity("User with given username already exists.").build();
-		} catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		}
-		
+
 	}
 
-	
 	@POST
 	@Path("/login")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response register(LoginDTO authData) {
 		try {
-			return Response.ok().entity(userService.login(authData)).build();		
-		} catch(CustomException e){
+			return Response.ok().entity(userService.login(authData)).build();
+		} catch (CustomException e) {
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
-		} catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		}
-		
+
 	}
-	
+
 	@GET
-	@Secured({Role.ADMIN, Role.GUEST})
+	@Secured({ Role.ADMIN, Role.GUEST })
 	@Path("/hello")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response sayHello() {
 		try {
-			return Response.ok().entity("Hello").build();		
-		} catch(Exception e){
+			return Response.ok().entity("Hello").build();
+		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		}
-		
+
 	}
-	
+
 	private boolean hasRequiredFields(UserDTO newUser) {
-		if(newUser.getUsername().isEmpty() || newUser.getPassword().isEmpty() || newUser.getName().isEmpty() || newUser.getLastName().isEmpty()) 
-			return false;	
+		if (newUser.getUsername().isEmpty() || newUser.getPassword().isEmpty() || newUser.getName().isEmpty()
+				|| newUser.getLastName().isEmpty())
+			return false;
 		return true;
 	}
+
+	@GET
+	@Secured({ Role.GUEST })
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUser(@PathParam("id") Long id, @HeaderParam("Authorization") String token) {
+		try {
+			return Response.ok().entity(userService.getUser(id, token)).build();
+		} catch (CustomException e) {
+			return Response.status(e.getStatus()).entity(e.getMessage()).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+
+	}
+	
+	@PUT
+	@Secured({ Role.GUEST })
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response editUser(UserDTO userData, @PathParam("id") Long id, @HeaderParam("Authorization") String token) {
+		try {
+			return Response.ok().entity(userService.editUser(userData, id, token)).build();
+		} catch (CustomException e) {
+			return Response.status(e.getStatus()).entity(e.getMessage()).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+
+	}
+
 }

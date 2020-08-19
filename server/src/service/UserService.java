@@ -9,6 +9,7 @@ import javax.ws.rs.core.Response.Status;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import config.SecurityConstants;
+import domain.Role;
 import domain.User;
 import dto.LoginDTO;
 import dto.UserDTO;
@@ -70,6 +71,42 @@ public class UserService {
 		if(!result.verified) throw new CustomException("Bad credentials.",Status.BAD_REQUEST);
 		
 		return generateJWTForUser(user);
+	}
+
+	public UserDTO getUser(Long id, String token) throws CustomException {
+		User user = userRepository.findById(id);
+		if(user == null) throw new CustomException("Unauthorized", Status.UNAUTHORIZED);
+		if(getIdFromJWT(token) != id) throw new CustomException("Unauthorized", Status.UNAUTHORIZED);
+		return new UserDTO(user);
+	}
+	
+	private Long getIdFromJWT(String token) {
+        try {
+            Claims claims = Jwts.parser().setSigningKey(SecurityConstants.SECRET).parseClaimsJws(token.substring(7)).getBody();
+            return Long.parseLong(claims.get("id", String.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+	public UserDTO editUser(UserDTO userData, Long id, String token) throws CustomException {
+		User user = userRepository.findById(id);
+		if(user == null) throw new CustomException("Unauthorized", Status.UNAUTHORIZED);
+		if(getIdFromJWT(token) != id) throw new CustomException("Unauthorized", Status.UNAUTHORIZED);
+		
+		if(isNotEmpty(userData.getName())) user.setName(userData.getName());
+		if(isNotEmpty(userData.getLastName())) user.setLastName(userData.getLastName());
+		if(!userData.getGender().equals(user.getGender())) user.setGender(userData.getGender());
+		if(isNotEmpty(userData.getPassword())) user.setPassword(userData.getPassword());
+		
+		userRepository.update(user);
+		
+		return userData;
+	}
+
+	private boolean isNotEmpty(String name) {
+		return name != null && name.length() > 0;
 	}
 	
 }

@@ -14,5 +14,9 @@ public class CustomException extends Exception {
 		super();
 		this.status = status;
 	}
+
+	public Status getStatus() {
+		return status;
+	}
 	
 }

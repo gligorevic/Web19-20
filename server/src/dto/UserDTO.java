@@ -2,6 +2,7 @@ package dto;
 
 import domain.Gender;
 import domain.Role;
+import domain.User;
 
 public class UserDTO {
 	private String username;
@@ -23,6 +24,14 @@ public class UserDTO {
 	}
 
 
+
+	public UserDTO(User user) {
+		this.name = user.getName();
+		this.lastName = user.getLastName();
+		this.gender = user.getGender();
+		this.role = user.getRole();
+		this.username = user.getUsername();	
+	}
 
 	public String getUsername() {
 		return username;
