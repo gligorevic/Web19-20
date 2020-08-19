@@ -60,12 +60,10 @@ export default {
   },
   methods: {
     async submit() {
-      console.log(this.user);
       try {
         const res = await Axios.post("/api/user/login", {
           ...this.user,
         });
-        console.log(res);
         localStorage.setItem("jwt", res.data);
         eventBus.setUserLoggedIn(true);
         this.$router.push("/");

@@ -6,24 +6,16 @@
         <span>Apartments</span>
       </a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <router-link to="/" tag="li" active-class="active" exact>
-          <a>Home</a>
-        </router-link>
+        <router-link to="/" tag="li" active-class="active" exact>Home</router-link>
 
-        <router-link to="/user" tag="li" active-class="active" exact v-if="isUserLoggedIn">
-          <a>Profile</a>
-        </router-link>
+        <router-link to="/user" tag="li" active-class="active" exact v-if="isUserLoggedIn">Profile</router-link>
 
         <li v-if="isUserLoggedIn">
-          <a href="#" @click="logout">Logout</a>
+          <span href="#" @click="logout">Logout</span>
         </li>
         <template v-else>
-          <router-link to="/login" tag="li" active-class="active" exact>
-            <a>Login</a>
-          </router-link>
-          <router-link to="/register" tag="li" active-class="active" exact>
-            <a>Register</a>
-          </router-link>
+          <router-link to="/login" tag="li" active-class="active" exact>Login</router-link>
+          <router-link to="/register" tag="li" active-class="active" exact>Register</router-link>
         </template>
       </ul>
     </div>
@@ -49,3 +41,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+#nav-mobile > li {
+  padding: 0px 15px;
+  cursor: pointer;
+}
+</style>
