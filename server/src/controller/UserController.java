@@ -26,9 +26,14 @@ public class UserController {
 	private UserService userService;
 
 	@GET
+	@Secured({ Role.ADMIN, Role.HOST })
 	@Produces(MediaType.APPLICATION_JSON)
-	public String test() {
-		return userService.findAll().toString();
+	public Response getAllUsers() {
+		try {
+			return Response.ok().entity(userService.findAll()).build();
+		}catch(Exception e){
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
 	}
 
 	@POST

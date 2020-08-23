@@ -9,6 +9,7 @@
         <router-link to="/" tag="li" active-class="active" exact>Home</router-link>
 
         <router-link to="/user" tag="li" active-class="active" exact v-if="isUserLoggedIn">Profile</router-link>
+        <router-link to="/users" tag="li" active-class="active" exact v-if="isUserLoggedIn && currentUser.role === 'ADMIN'">Users</router-link>
 
         <li v-if="isUserLoggedIn">
           <span href="#" @click="logout">Logout</span>
@@ -27,6 +28,7 @@ import { eventBus } from "../../main";
 export default {
   data: () => ({
     isUserLoggedIn: eventBus.isUserLoggedIn,
+    currentUser: eventBus.currentUser
   }),
   methods: {
     logout() {
@@ -37,6 +39,7 @@ export default {
   created() {
     eventBus.$on("loggedInChanged", () => {
       this.isUserLoggedIn = eventBus.isUserLoggedIn;
+      this.currentUser = eventBus.currentUser;
     });
   },
 };

@@ -1,5 +1,6 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +32,10 @@ public class UserService {
 		this.userRepository = new UserRepository(jsonFileStream, lidgen);
 	}
 	
-	public List<User> findAll() {
-		return userRepository.findAll();
+	public List<UserDTO> findAll() {
+		List<UserDTO> users = new ArrayList<UserDTO>();
+ 		userRepository.findAll().stream().forEach(user -> users.add(new UserDTO(user)));;
+ 		return users;
 	}
 
 	public String register(UserDTO newUser) throws CustomException {
