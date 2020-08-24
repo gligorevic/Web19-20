@@ -45,6 +45,12 @@ public class UserService {
 		
 		return generateJWTForUser(user);	
 	}
+	
+	public User registerHost(UserDTO newHost) throws CustomException{
+		if(userRepository.findByUsername(newHost.getUsername()) != null) throw new CustomException(Status.BAD_REQUEST);
+		newHost.setPassword(new String(BCrypt.withDefaults().hashToChar(12, newHost.getPassword().toCharArray())));
+		return userRepository.save(new User(newHost));
+	}
 
 	private String generateJWTForUser(User user) {
 		Date now = new Date(System.currentTimeMillis());

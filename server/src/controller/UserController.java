@@ -32,6 +32,7 @@ public class UserController {
 		try {
 			return Response.ok().entity(userService.findAll()).build();
 		}catch(Exception e){
+			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		}
 	}
@@ -51,7 +52,24 @@ public class UserController {
 		}
 
 	}
-
+	
+	@POST
+	@Path("/host")
+	@Secured({ Role.ADMIN })
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newHost(UserDTO newHost){
+		try {
+			if (!hasRequiredFields(newHost))
+				return Response.status(Status.BAD_REQUEST).entity("All fields must be filled out.").build();
+			return Response.ok().entity(userService.registerHost(newHost)).build();
+		} catch (CustomException e) {
+			return Response.status(Status.BAD_REQUEST).entity("User with given username already exists.").build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+		
+	}
 	@POST
 	@Path("/login")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -89,8 +107,8 @@ public class UserController {
 	}
 
 	@GET
-	@Secured({ Role.GUEST })
 	@Path("/{id}")
+	@Secured({ Role.GUEST , Role.ADMIN, Role.HOST })
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUser(@PathParam("id") Long id, @HeaderParam("Authorization") String token) {
 		try {
@@ -105,7 +123,7 @@ public class UserController {
 	}
 	
 	@PUT
-	@Secured({ Role.GUEST })
+	@Secured({ Role.GUEST , Role.ADMIN, Role.HOST })
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response editUser(UserDTO userData, @PathParam("id") Long id, @HeaderParam("Authorization") String token) {
