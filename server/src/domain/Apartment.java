@@ -5,15 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import domain.interfaces.iIdentifiable;
-
-enum Type {
-	ROOM, APARTMENT
-}
-
-enum Status {
-	ACTIVE, INACTIVE
-}
-
+	
 public class Apartment implements iIdentifiable<Long> {
 	private Long id;
 	private String name;

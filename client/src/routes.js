@@ -3,6 +3,7 @@ import Profile from "./components/User/Profile.vue";
 import Registration from "./components/User/Registration.vue";
 import Login from "./components/User/Login.vue";
 import MyApartments from "./components/Apartment/MyApartments";
+import AddApartment from "./components/Apartment/AddApartmentPage";
 // import { eventBus } from "./main";
 
 export const routes = [
@@ -19,6 +20,14 @@ export const routes = [
     },
   },
   {
+    path: "/addApartment",
+    component: AddApartment,
+    meta: {
+      auth: true,
+      roleRequired: ["HOST"],
+    },
+  },
+  {
     path: "/myApartments",
     component: MyApartments,
     meta: {
@@ -26,6 +35,7 @@ export const routes = [
       roleRequired: ["HOST"],
     },
   },
+
   {
     path: "/register",
     component: Registration,

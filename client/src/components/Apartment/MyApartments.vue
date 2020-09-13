@@ -1,8 +1,19 @@
 <template>
-  <div class="container wrapper">
-    <h2>My Apartments</h2>
+  <div class="container wrapper row">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h2>My Apartments</h2>
+
+      <router-link
+        to="/addApartment"
+        tag="a"
+        exact
+        class="btn-floating btn-large waves-effect waves-light green"
+      >
+        <i class="material-icons">add</i>
+      </router-link>
+    </div>
     <hr />
-    <div class="row">
+    <div class="col s12 row">
       <app-apartment-card
         v-for="apartment in apartments"
         :key="apartment.id"
@@ -11,6 +22,8 @@
     </div>
   </div>
 </template>
+
+
 <script>
 import { eventBus } from "../../main";
 import Axios from "axios";
@@ -38,7 +51,12 @@ export default {
   },
 };
 </script>
+
 <style scoped>
+.col {
+  padding: 0;
+}
+
 .wrapper {
   padding: 30px;
 }
