@@ -35,6 +35,7 @@ export default {
 
 <style scoped>
 .feedbackPopup {
+  z-index: 130;
   padding: 30px;
   position: absolute;
   bottom: 40px;

@@ -4,29 +4,31 @@
       <h2>Profile page</h2>
 
       <li class="item">
-        <span>Name:</span><span>{{ userData.name }}</span>
+        <span>Name:</span>
+        <span>{{ userData.name }}</span>
       </li>
       <li class="item">
-        <span>Lastname:</span><span>{{ userData.lastName }}</span>
+        <span>Lastname:</span>
+        <span>{{ userData.lastName }}</span>
       </li>
       <li class="item">
-        <span><i class="material-icons">person</i>Username:</span
-        ><span>{{ userData.username }}</span>
+        <span>
+          <i class="material-icons">person</i>Username:
+        </span>
+        <span>{{ userData.username }}</span>
       </li>
       <li class="item">
-        <span><i class="material-icons">wc</i>Gender:</span
-        ><span>{{ userData.gender }}</span>
+        <span>
+          <i class="material-icons">wc</i>Gender:
+        </span>
+        <span>{{ userData.gender }}</span>
       </li>
       <div class="buttons">
-        <button
-          class="btn waves-effect waves-light"
-          name="action"
-          @click="openEditForm"
-        >
+        <button class="btn waves-effect waves-light" name="action" @click="openEditForm">
           Edit profile info
           <i class="material-icons right">create</i>
         </button>
-        <button class="btn waves-effect waves-light" name="action">
+        <button class="btn waves-effect waves-light" name="action" @click="openChangePasswordForm">
           Change password
           <i class="material-icons right">settings</i>
         </button>
@@ -40,21 +42,27 @@
         v-if="showEditDataPopup"
       ></app-edit-profile>
     </transition>
+    <transition name="slide" type="animation" mode="out-in">
+      <app-change-password :closeDialog="closeDialog" v-if="showChangePasswordDialog"></app-change-password>
+    </transition>
   </div>
 </template>
 <script>
 import EditProfile from "./EditProfile.vue";
+import ChangePassword from "./ChangePassword.vue";
 import Axios from "axios";
 import { eventBus } from "../../main";
 export default {
   data() {
     return {
       showEditDataPopup: false,
+      showChangePasswordDialog: false,
       userData: { username: "", name: "", lastName: "", gender: "" },
     };
   },
   components: {
     AppEditProfile: EditProfile,
+    AppChangePassword: ChangePassword,
   },
   methods: {
     openEditForm() {
@@ -63,8 +71,15 @@ export default {
       document.querySelector("body").style.overflow = "hidden";
       window.scrollTo(0, 0);
     },
+    openChangePasswordForm() {
+      this.showChangePasswordDialog = true;
+
+      document.querySelector("body").style.overflow = "hidden";
+      window.scrollTo(0, 0);
+    },
     closeDialog() {
       this.showEditDataPopup = false;
+      this.showChangePasswordDialog = false;
       document.querySelector("body").style.overflow = "scroll";
     },
     closeDialogAndUpdateState(newUserData) {
