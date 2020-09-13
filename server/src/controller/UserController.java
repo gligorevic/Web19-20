@@ -72,7 +72,7 @@ public class UserController {
 	}
 
 	@GET
-	@Secured({ Role.GUEST })
+	@Secured({ Role.GUEST, Role.HOST, Role.ADMIN })
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUser(@PathParam("id") Long id, @HeaderParam("Authorization") String token) {
@@ -88,7 +88,7 @@ public class UserController {
 	}
 	
 	@PUT
-	@Secured({ Role.GUEST })
+	@Secured({ Role.GUEST, Role.HOST, Role.ADMIN  })
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response editUser(UserDTO userData, @PathParam("id") Long id, @HeaderParam("Authorization") String token) {
@@ -104,10 +104,10 @@ public class UserController {
 	}
 	
 	@PUT
-	@Secured({ Role.GUEST })
+	@Secured({ Role.GUEST, Role.HOST, Role.ADMIN  })
 	@Path("/{id}/password")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response editUser(ChangePasswordDTO changePasswordDTO, @PathParam("id") Long id, @HeaderParam("Authorization") String token) {
+	public Response changePassword(ChangePasswordDTO changePasswordDTO, @PathParam("id") Long id, @HeaderParam("Authorization") String token) {
 		try {
 			return Response.ok().entity(userService.changePassword(changePasswordDTO, id, token)).build();
 		} catch (CustomException e) {

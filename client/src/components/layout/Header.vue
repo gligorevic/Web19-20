@@ -9,7 +9,13 @@
         <router-link to="/" tag="li" active-class="active" exact>Home</router-link>
 
         <router-link to="/user" tag="li" active-class="active" exact v-if="isUserLoggedIn">Profile</router-link>
-
+        <router-link
+          to="/myApartments"
+          tag="li"
+          active-class="active"
+          exact
+          v-if="isUserHost"
+        >My apartments</router-link>
         <li v-if="isUserLoggedIn">
           <span href="#" @click="logout">Logout</span>
         </li>
@@ -35,9 +41,15 @@ export default {
     },
   },
   created() {
+    console.log(eventBus.currentUser);
     eventBus.$on("loggedInChanged", () => {
       this.isUserLoggedIn = eventBus.isUserLoggedIn;
     });
+  },
+  computed: {
+    isUserHost() {
+      return eventBus.currentUser.role === "HOST";
+    },
   },
 };
 </script>

@@ -56,6 +56,11 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.auth && !eventBus.isUserLoggedIn) {
     next("/login");
+  } else if (
+    to.meta.roleRequired &&
+    !to.meta.roleRequired.includes(eventBus.currentUser.role)
+  ) {
+    next("/");
   } else if (to.meta.loggedOut && eventBus.isUserLoggedIn) {
     next("/");
   } else {

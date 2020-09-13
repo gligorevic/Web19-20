@@ -2,6 +2,7 @@ import Home from "./components/Apartment/Home.vue";
 import Profile from "./components/User/Profile.vue";
 import Registration from "./components/User/Registration.vue";
 import Login from "./components/User/Login.vue";
+import MyApartments from "./components/Apartment/MyApartments";
 // import { eventBus } from "./main";
 
 export const routes = [
@@ -15,6 +16,14 @@ export const routes = [
     component: Profile,
     meta: {
       auth: true,
+    },
+  },
+  {
+    path: "/myApartments",
+    component: MyApartments,
+    meta: {
+      auth: true,
+      roleRequired: ["HOST"],
     },
   },
   {
