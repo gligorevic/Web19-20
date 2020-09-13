@@ -10,7 +10,10 @@
 
         <router-link to="/user" tag="li" active-class="active" exact v-if="isUserLoggedIn">Profile</router-link>
         <router-link to="/users" tag="li" active-class="active" exact v-if="isUserLoggedIn && currentUser.role === 'ADMIN'">Users</router-link>
-
+        <router-link to="/reservations" tag="li" active-class="active" exact v-if="isUserLoggedIn && currentUser.role === 'ADMIN'">Reservations</router-link>
+        <router-link to="/reservationshost" tag="li" active-class="active" exact v-if="isUserLoggedIn && currentUser.role === 'HOST'">Reservations</router-link>
+        <router-link to="/reservationsguest" tag="li" active-class="active" exact v-if="isUserLoggedIn && currentUser.role === 'GUEST'">Reservations</router-link>
+      
         <li v-if="isUserLoggedIn">
           <span href="#" @click="logout">Logout</span>
         </li>

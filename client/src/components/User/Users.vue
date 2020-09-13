@@ -25,7 +25,38 @@
       </div>   
       <div>
         <div>
-          <input type="text" v-model="search" placeholder="Search username.."/> 
+          <input class="searchField" type="text" v-model="search" placeholder="Search username.."/> 
+        </div>
+        <div class="row">
+          <div class="col s6">
+            <form action="#">
+              <p font-size="20">User gender:</p>
+              <input type="radio" id="one" value="" v-model="gender">
+              <label for="one">Any</label>
+              <br>
+              <input type="radio" id="two" value="MALE" v-model="gender">
+              <label for="two">Male</label>
+              <br>
+              <input type="radio" id="three" value="FEMALE" v-model="gender">
+              <label for="three">Female</label>
+            </form>
+          </div>
+          <div class="col s6">
+            <p>User role:</p>
+            <form action="#">
+              <input type="checkbox" id="Admin" value="ADMIN" v-model="userRole">
+              <label for="Admin">Admin</label>
+              <br>
+              <input type="checkbox" id="Host" value="HOST" v-model="userRole">
+              <label for="Host">Host</label>
+              <br>
+              <input type="checkbox" id="Guest" value="GUEST" v-model="userRole">
+              <label for="Guest">Guest</label>
+              <br>
+            </form>
+          </div>
+        </div>
+        <div class="divider">
         </div>
         <div class="row">
           <div class="col s4" v-for="user in filteredUsers" :key="user.id">
@@ -58,14 +89,16 @@
 </template>
 
 <script>
-import AddHost from './AddHost.vue'
+import AddHost from './AddHost.vue';
 import Axios from "axios";
 export default {
   data() {
     return {
       showAddHostPopup: false,
       users: [],
-      search:''
+      search:'',
+      gender:'',
+      userRole: [],
     };
   },
   async created() {
@@ -97,7 +130,11 @@ export default {
   computed: {
     filteredUsers: function(){
       return this.users.filter((user) => {
-        return user.username.toLowerCase().match(this.search.toLowerCase());
+        if(this.userRole.length > 0){
+        return user.username.toLowerCase().match(this.search.toLowerCase()) && user.gender.match(this.gender) && this.userRole.includes(user.role);
+        }else{
+          return user.username.toLowerCase().match(this.search.toLowerCase()) && user.gender.match(this.gender) 
+        }
       })
     }
   }
@@ -113,7 +150,7 @@ export default {
   right: 0px;
   top: 26px;
 }
-input {
+.searchField {
   padding: 4px 12px;
   color: rgba(0,0,0,.70);
   border: 1px solid rgba(0,0,0,.12);
@@ -129,7 +166,7 @@ input {
 
 .userList {
   width: 70%;
-  margin: 70px auto;
+  margin: 30px auto;
   padding: 30px 60px;
 }
 </style>
