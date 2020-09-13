@@ -41,7 +41,6 @@ export default {
     },
   },
   created() {
-    console.log(eventBus.currentUser);
     eventBus.$on("loggedInChanged", () => {
       this.isUserLoggedIn = eventBus.isUserLoggedIn;
     });

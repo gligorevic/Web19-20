@@ -16,8 +16,10 @@ enum Status {
 
 public class Apartment implements iIdentifiable<Long> {
 	private Long id;
+	private String name;
 	private Type type;
 	private int roomNumber;
+	private int guestNumber;
 	private Location location;
 	private Date startDate;
 	private Date endDate;
@@ -40,6 +42,14 @@ public class Apartment implements iIdentifiable<Long> {
 		this.id = id;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public Type getType() {
 		return type;
 	}
@@ -54,6 +64,14 @@ public class Apartment implements iIdentifiable<Long> {
 
 	public void setRoomNumber(int roomNumber) {
 		this.roomNumber = roomNumber;
+	}
+	
+	public int getGuestNumber() {
+		return guestNumber;
+	}
+
+	public void setGuestNumber(int guestNumber) {
+		this.guestNumber = guestNumber;
 	}
 
 	public Location getLocation() {

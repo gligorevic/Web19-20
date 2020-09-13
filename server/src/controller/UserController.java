@@ -26,12 +26,6 @@ public class UserController {
 	@Inject
 	private UserService userService;
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String test() {
-		return userService.findAll().toString();
-	}
-
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response register(UserDTO newUser) {
