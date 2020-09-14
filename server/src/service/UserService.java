@@ -115,5 +115,10 @@ public class UserService {
 	private boolean isNotEmpty(String name) {
 		return name != null && name.length() > 0;
 	}
+
+	public User getUserByToken(String token) {
+		Long id = getIdFromJWT(token);
+		return db.getUserRepository().findById(id);
+	}
 	
 }

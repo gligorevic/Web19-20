@@ -1,6 +1,9 @@
 <template>
   <div>
-    <img :src="apartment.images && apartment.images[0]" class="coverImg" />
+    <img
+      :src="apartment.images && 'http://localhost:8081/api/' + apartment.images[0]"
+      class="coverImg"
+    />
     <div class="apartmentInfo">
       <h5>{{ apartment.name }}</h5>
       <div style="display: flex; flex-direction: row-reverse;">

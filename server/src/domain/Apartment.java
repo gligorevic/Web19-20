@@ -18,8 +18,8 @@ public class Apartment implements iIdentifiable<Long> {
 	private User host;
 	private List<String> images;
 	private float pricePerNight;
-	private LocalTime checkInTime;
-	private LocalTime checkOutTime;
+	private Date checkInTime;
+	private Date checkOutTime;
 	private Status status;
 	private Boolean deleted = false;
 	private List<Amenity> amenities;
@@ -114,19 +114,19 @@ public class Apartment implements iIdentifiable<Long> {
 		this.pricePerNight = pricePerNight;
 	}
 
-	public LocalTime getCheckInTime() {
+	public Date getCheckInTime() {
 		return checkInTime;
 	}
 
-	public void setCheckInTime(LocalTime checkInTime) {
+	public void setCheckInTime(Date checkInTime) {
 		this.checkInTime = checkInTime;
 	}
 
-	public LocalTime getCheckOutTime() {
+	public Date getCheckOutTime() {
 		return checkOutTime;
 	}
 
-	public void setCheckOutTime(LocalTime checkOutTime) {
+	public void setCheckOutTime(Date checkOutTime) {
 		this.checkOutTime = checkOutTime;
 	}
 

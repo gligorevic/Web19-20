@@ -28,6 +28,7 @@ export default {
 
 .wraper {
   box-shadow: -1px 2px 4px -1px rgba(0, 0, 0, 0.75);
+  margin-bottom: 30px;
 }
 
 .cardToolbar {
