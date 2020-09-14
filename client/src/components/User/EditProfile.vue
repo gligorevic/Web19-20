@@ -9,55 +9,27 @@
         <form class="col s12">
           <div class="row">
             <div class="input-field col s6">
-              <input
-                id="first_name"
-                type="text"
-                class="validate"
-                v-model="user.name"
-              />
-              <label for="first_name">First Name</label>
+              <input id="first_name" type="text" class="validate" v-model="user.name" />
+              <label for="first_name" class="active">First Name</label>
             </div>
             <div class="input-field col s6">
-              <input
-                id="last_name"
-                type="text"
-                class="validate"
-                v-model="user.lastName"
-              />
-              <label for="last_name">Last Name</label>
+              <input id="last_name" type="text" class="validate" v-model="user.lastName" />
+              <label for="last_name" class="active">Last Name</label>
             </div>
           </div>
 
           <div class="row">
             <div class="col s3">Gender:</div>
             <div class="col s3">
-              <input
-                name="group1"
-                type="radio"
-                id="male"
-                value="MALE"
-                v-model="user.gender"
-              />
+              <input name="group1" type="radio" id="male" value="MALE" v-model="user.gender" />
               <label for="male">Male</label>
             </div>
             <div class="col s3">
-              <input
-                name="group1"
-                type="radio"
-                id="female"
-                value="FEMALE"
-                v-model="user.gender"
-              />
+              <input name="group1" type="radio" id="female" value="FEMALE" v-model="user.gender" />
               <label for="female">Female</label>
             </div>
             <div class="col s3">
-              <input
-                name="group1"
-                type="radio"
-                id="other"
-                value="OTHER"
-                v-model="user.gender"
-              />
+              <input name="group1" type="radio" id="other" value="OTHER" v-model="user.gender" />
               <label for="other">Other</label>
             </div>
           </div>
@@ -67,13 +39,9 @@
                 class="btn btn-primary"
                 @click.prevent="submit"
                 :disabled="isSomeFieldEmpty"
-              >
-                Submit!
-              </button>
+              >Submit!</button>
             </div>
-            <span class="badge" v-if="isSomeFieldEmpty"
-              >Fields can't stay empty!</span
-            >
+            <span class="badge" v-if="isSomeFieldEmpty">Fields can't stay empty!</span>
           </div>
         </form>
       </div>

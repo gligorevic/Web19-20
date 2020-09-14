@@ -5,6 +5,7 @@ import domain.interfaces.iIdentifiable;
 public class Address implements iIdentifiable<Long> {
 	private Long id;
 	private String city;
+	private String country;
 	private String postal;
 	private String street;
 	private String houseNumber;
@@ -29,6 +30,16 @@ public class Address implements iIdentifiable<Long> {
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+	
+	
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 	public String getPostal() {

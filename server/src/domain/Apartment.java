@@ -5,27 +5,21 @@ import java.util.Date;
 import java.util.List;
 
 import domain.interfaces.iIdentifiable;
-
-enum Type {
-	ROOM, APARTMENT
-}
-
-enum Status {
-	ACTIVE, INACTIVE
-}
-
+	
 public class Apartment implements iIdentifiable<Long> {
 	private Long id;
+	private String name;
 	private Type type;
 	private int roomNumber;
+	private int guestNumber;
 	private Location location;
 	private Date startDate;
 	private Date endDate;
 	private User host;
 	private List<String> images;
 	private float pricePerNight;
-	private LocalTime checkInTime;
-	private LocalTime checkOutTime;
+	private Date checkInTime;
+	private Date checkOutTime;
 	private Status status;
 	private Boolean deleted = false;
 	private List<Amenity> amenities;
@@ -40,6 +34,14 @@ public class Apartment implements iIdentifiable<Long> {
 		this.id = id;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public Type getType() {
 		return type;
 	}
@@ -54,6 +56,14 @@ public class Apartment implements iIdentifiable<Long> {
 
 	public void setRoomNumber(int roomNumber) {
 		this.roomNumber = roomNumber;
+	}
+	
+	public int getGuestNumber() {
+		return guestNumber;
+	}
+
+	public void setGuestNumber(int guestNumber) {
+		this.guestNumber = guestNumber;
 	}
 
 	public Location getLocation() {
@@ -104,19 +114,19 @@ public class Apartment implements iIdentifiable<Long> {
 		this.pricePerNight = pricePerNight;
 	}
 
-	public LocalTime getCheckInTime() {
+	public Date getCheckInTime() {
 		return checkInTime;
 	}
 
-	public void setCheckInTime(LocalTime checkInTime) {
+	public void setCheckInTime(Date checkInTime) {
 		this.checkInTime = checkInTime;
 	}
 
-	public LocalTime getCheckOutTime() {
+	public Date getCheckOutTime() {
 		return checkOutTime;
 	}
 
-	public void setCheckOutTime(LocalTime checkOutTime) {
+	public void setCheckOutTime(Date checkOutTime) {
 		this.checkOutTime = checkOutTime;
 	}
 

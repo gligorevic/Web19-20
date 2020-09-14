@@ -6,31 +6,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.ws.rs.core.Response.Status;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import config.SecurityConstants;
-import domain.Role;
 import domain.User;
+import dto.ChangePasswordDTO;
 import dto.LoginDTO;
 import dto.UserDTO;
 import exception.CustomException;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.TextCodec;
-import repository.LongIdGenerator;
-import repository.UserRepository;
-import repository.streams.JSONFileStream;
-
+import repository.DBRepository;
 
 public class UserService {
-	private UserRepository userRepository;
-
-	public UserService() {
-		JSONFileStream<User> jsonFileStream = new JSONFileStream<User>("users.txt", User.class);
-		LongIdGenerator lidgen = new LongIdGenerator();
-		lidgen.initializeId(Long.valueOf(jsonFileStream.readAll().size()));
-		this.userRepository = new UserRepository(jsonFileStream, lidgen);
-	}
+	@Inject
+	private DBRepository db;
 	
 	public List<UserDTO> findAll() {
 		List<UserDTO> users = new ArrayList<UserDTO>();
@@ -39,9 +33,9 @@ public class UserService {
 	}
 
 	public String register(UserDTO newUser) throws CustomException {
-		if(userRepository.findByUsername(newUser.getUsername()) != null) throw new CustomException(Status.BAD_REQUEST);
+		if(db.getUserRepository().findByUsername(newUser.getUsername()) != null) throw new CustomException(Status.BAD_REQUEST);
 		newUser.setPassword(new String(BCrypt.withDefaults().hashToChar(12, newUser.getPassword().toCharArray())));
-		User user = userRepository.save(new User(newUser));
+		User user = db.getUserRepository().save(new User(newUser));
 		
 		return generateJWTForUser(user);	
 	}
@@ -75,7 +69,7 @@ public class UserService {
 	}
 
 	public String login(LoginDTO authData) throws CustomException {
-		User user = userRepository.findByUsername(authData.getUsername());
+		User user = db.getUserRepository().findByUsername(authData.getUsername());
 		BCrypt.Result result = BCrypt.verifyer().verify(authData.getPassword().toCharArray(), user.getPassword());
 		if(!result.verified) throw new CustomException("Bad credentials.",Status.BAD_REQUEST);
 		
@@ -83,7 +77,7 @@ public class UserService {
 	}
 
 	public UserDTO getUser(Long id, String token) throws CustomException {
-		User user = userRepository.findById(id);
+		User user = db.getUserRepository().findById(id);
 		if(user == null) throw new CustomException("Unauthorized", Status.UNAUTHORIZED);
 		if(getIdFromJWT(token) != id) throw new CustomException("Unauthorized", Status.UNAUTHORIZED);
 		return new UserDTO(user);
@@ -100,22 +94,40 @@ public class UserService {
     }
 
 	public UserDTO editUser(UserDTO userData, Long id, String token) throws CustomException {
-		User user = userRepository.findById(id);
+		User user = db.getUserRepository().findById(id);
 		if(user == null) throw new CustomException("Unauthorized", Status.UNAUTHORIZED);
 		if(getIdFromJWT(token) != id) throw new CustomException("Unauthorized", Status.UNAUTHORIZED);
 		
 		if(isNotEmpty(userData.getName())) user.setName(userData.getName());
 		if(isNotEmpty(userData.getLastName())) user.setLastName(userData.getLastName());
 		if(!userData.getGender().equals(user.getGender())) user.setGender(userData.getGender());
-		if(isNotEmpty(userData.getPassword())) user.setPassword(userData.getPassword());
-		
-		userRepository.update(user);
+
+		db.getUserRepository().update(user);
 		
 		return userData;
 	}
 
+	public ChangePasswordDTO changePassword(ChangePasswordDTO newPasswordData, Long id, String token) throws CustomException {
+		User user = db.getUserRepository().findById(id);
+		if(user == null) throw new CustomException("Unauthorized", Status.UNAUTHORIZED);
+		if(getIdFromJWT(token) != id) throw new CustomException("Unauthorized", Status.UNAUTHORIZED);
+		
+		BCrypt.Result result = BCrypt.verifyer().verify(newPasswordData.getOldPassword().toCharArray(), user.getPassword());
+		if(!result.verified) throw new CustomException("Old password is not correct.",Status.BAD_REQUEST);
+		
+		user.setPassword(new String(BCrypt.withDefaults().hashToChar(12, newPasswordData.getNewPassword().toCharArray())));
+		db.getUserRepository().update(user);
+		
+		return newPasswordData;
+	}
+	
 	private boolean isNotEmpty(String name) {
 		return name != null && name.length() > 0;
+	}
+
+	public User getUserByToken(String token) {
+		Long id = getIdFromJWT(token);
+		return db.getUserRepository().findById(id);
 	}
 	
 }
