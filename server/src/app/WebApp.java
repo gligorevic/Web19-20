@@ -6,6 +6,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import config.ApplicationBinder;
+import controller.AmenityController;
 import controller.ApartmentController;
 import controller.ImageController;
 import controller.UserController;
@@ -19,6 +20,7 @@ public class WebApp extends ResourceConfig {
 		register(UserController.class);
 		register(ApartmentController.class);
 		register(ImageController.class);
+		register(AmenityController.class);
 		register(new ApplicationBinder());
 		register(AuthenticationFilter.class);
 		

@@ -2,9 +2,10 @@ package config;
 
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
+import repository.DBRepository;
+import service.AmenityService;
 import service.ApartmentService;
 import service.UserService;
-import repository.DBRepository;
 
 public class ApplicationBinder extends AbstractBinder {
 	
@@ -13,6 +14,7 @@ public class ApplicationBinder extends AbstractBinder {
 		bindAsContract(DBRepository.class);
 		bindAsContract(UserService.class);
 		bindAsContract(ApartmentService.class);
+		bindAsContract(AmenityService.class);
 	}
 
 }

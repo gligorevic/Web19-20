@@ -139,6 +139,10 @@
       </div>
       <div class="col s4 formPart">
         <h5>Amenities:</h5>
+        <div v-for="amenity in allAmenities" :key="amenity.name" style="text-align: left;">
+          <input type="checkbox" :value="amenity.name" :id="amenity.name" @input="setAmenities" />
+          <label :for="amenity.name">{{amenity.name}}</label>
+        </div>
       </div>
       <div class="col s1" style="width: 20px;"></div>
       <div class="col s7 formPart">
@@ -176,6 +180,7 @@ import Axios from "axios";
 export default {
   data() {
     return {
+      allAmenities: [],
       today: new Date().toISOString().split("T")[0],
       images: [],
       apartment: {
@@ -188,6 +193,7 @@ export default {
         pricePerNight: 1,
         checkInTime: "",
         checkOutTime: "",
+        amenities: [],
         status: "INACTIVE",
       },
       location: {
@@ -204,6 +210,14 @@ export default {
     };
   },
   methods: {
+    setAmenities(e) {
+      console.log(e.target.value);
+      e.target.checked
+        ? this.apartment.amenities.push(
+            this.allAmenities.find((a) => a.name == e.target.value)
+          )
+        : this.apartment.filter((a) => a.name != e.target.value);
+    },
     handleChangeImages(e) {
       this.images = Array.from(e.target.files).map((file) => ({
         url: URL.createObjectURL(file),
@@ -252,6 +266,14 @@ export default {
         console.log(error);
       }
     },
+  },
+  async created() {
+    try {
+      const res = await Axios.get("/api/amenity");
+      this.allAmenities = res.data;
+    } catch (err) {
+      console.log(err);
+    }
   },
 };
 </script>

@@ -38,16 +38,19 @@ public class ApartmentService {
 		User user = userService.getUserByToken(token);
 		apartment.setHost(user);
 		
-		List<String> imagesPaths = new ArrayList<>();
-		String folder = "images/" + user.getId();
-		Files.createDirectories(Paths.get(folder));
-		for (int i = 0; i < files.size(); i++) {
-			BodyPartEntity bodyPartEntity = (BodyPartEntity) files.get(i).getEntity();
-			String fileName = files.get(i).getContentDisposition().getFileName();
-			imagesPaths.add(folder + "/" + fileName);
-			saveFile(bodyPartEntity.getInputStream(), folder, fileName);	
+		if(files != null) {
+			List<String> imagesPaths = new ArrayList<>();
+			String folder = "images/" + user.getId();
+			Files.createDirectories(Paths.get(folder));
+		
+			for (int i = 0; i < files.size(); i++) {
+				BodyPartEntity bodyPartEntity = (BodyPartEntity) files.get(i).getEntity();
+				String fileName = files.get(i).getContentDisposition().getFileName();
+				imagesPaths.add(folder + "/" + fileName);
+				saveFile(bodyPartEntity.getInputStream(), folder, fileName);	
+			}
+			apartment.setImages(imagesPaths); 
 		}
-		apartment.setImages(imagesPaths);
 		System.out.println(apartment.getCheckInTime());
 		db.getApartmentRepository().save(apartment);
 		apartment.setHost(null);

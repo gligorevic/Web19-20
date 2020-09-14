@@ -6,12 +6,6 @@
     />
     <div class="apartmentInfo">
       <h5>{{ apartment.name }}</h5>
-      <div style="display: flex; flex-direction: row-reverse;">
-        <a
-          style="display: inline-block; padding: 0px 7px;"
-          class="waves-effect waves-teal btn-flat"
-        >View more</a>
-      </div>
     </div>
   </div>
 </template>

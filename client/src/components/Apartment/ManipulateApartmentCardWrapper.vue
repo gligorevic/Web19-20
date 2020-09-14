@@ -1,14 +1,22 @@
 <template>
-  <div class="col s4 wraper">
-    <div class="cardToolbar">
-      <span class="iconStyle redc">
-        <i class="material-icons">delete</i>
-      </span>
-      <span class="iconStyle yellowc">
-        <i class="material-icons">edit</i>
-      </span>
+  <div class="col s4">
+    <div class="wraper">
+      <div class="cardToolbar">
+        <span class="iconStyle redc">
+          <i class="material-icons">delete</i>
+        </span>
+        <span class="iconStyle yellowc">
+          <i class="material-icons">edit</i>
+        </span>
+      </div>
+      <app-apartment-card :apartment="apartment"></app-apartment-card>
+      <div style="display: flex; flex-direction: row-reverse; padding: 10px;">
+        <a
+          style="display: inline-block; padding: 0px 7px;"
+          class="waves-effect waves-teal btn-flat"
+        >View more</a>
+      </div>
     </div>
-    <app-apartment-card :apartment="apartment"></app-apartment-card>
   </div>
 </template>
 <script>
@@ -28,7 +36,7 @@ export default {
 
 .wraper {
   box-shadow: -1px 2px 4px -1px rgba(0, 0, 0, 0.75);
-  margin-bottom: 30px;
+  margin: 10px;
 }
 
 .cardToolbar {
