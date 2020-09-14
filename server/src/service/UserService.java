@@ -1,5 +1,6 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,8 +26,10 @@ public class UserService {
 	@Inject
 	private DBRepository db;
 	
-	public List<User> findAll() {
-		return db.getUserRepository().findAll();
+	public List<UserDTO> findAll() {
+		List<UserDTO> users = new ArrayList<UserDTO>();
+ 		userRepository.findAll().stream().forEach(user -> users.add(new UserDTO(user)));;
+ 		return users;
 	}
 
 	public String register(UserDTO newUser) throws CustomException {
@@ -35,6 +38,12 @@ public class UserService {
 		User user = db.getUserRepository().save(new User(newUser));
 		
 		return generateJWTForUser(user);	
+	}
+	
+	public User registerHost(UserDTO newHost) throws CustomException{
+		if(userRepository.findByUsername(newHost.getUsername()) != null) throw new CustomException(Status.BAD_REQUEST);
+		newHost.setPassword(new String(BCrypt.withDefaults().hashToChar(12, newHost.getPassword().toCharArray())));
+		return userRepository.save(new User(newHost));
 	}
 
 	private String generateJWTForUser(User user) {
