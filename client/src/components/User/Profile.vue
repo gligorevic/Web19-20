@@ -24,11 +24,19 @@
         <span>{{ userData.gender }}</span>
       </li>
       <div class="buttons">
-        <button class="btn waves-effect waves-light" name="action" @click="openEditForm">
+        <button
+          class="btn waves-effect waves-light blue lighten-2"
+          name="action"
+          @click="openEditForm"
+        >
           Edit profile info
           <i class="material-icons right">create</i>
         </button>
-        <button class="btn waves-effect waves-light" name="action" @click="openChangePasswordForm">
+        <button
+          class="btn waves-effect waves-light blue lighten-2"
+          name="action"
+          @click="openChangePasswordForm"
+        >
           Change password
           <i class="material-icons right">settings</i>
         </button>

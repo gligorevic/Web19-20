@@ -14,7 +14,7 @@ import service.AmenityService;
 public class AmenityController {
 	@Inject
 	private AmenityService amenityService;
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllAmenities() {

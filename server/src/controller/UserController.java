@@ -98,7 +98,6 @@ public class UserController {
 	@GET
 	@Secured({ Role.GUEST, Role.HOST, Role.ADMIN })
 	@Path("/{id}")
-	@Secured({ Role.GUEST , Role.ADMIN, Role.HOST })
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUser(@PathParam("id") Long id, @HeaderParam("Authorization") String token) {
 		try {

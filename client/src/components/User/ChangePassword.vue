@@ -52,7 +52,7 @@
           <div class="row">
             <div class="col s12">
               <button
-                class="btn btn-primary"
+                class="btn btn-primary blue lighten-2"
                 @click.prevent="submit"
                 :disabled="isSomeFieldEmpty || checkIfNotMatching"
               >Change password</button>

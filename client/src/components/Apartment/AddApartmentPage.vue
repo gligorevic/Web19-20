@@ -169,13 +169,14 @@
         </div>
       </div>
       <div class="col s12">
-        <a class="waves-effect waves-light btn" @click.prevent="submit">Add apartment</a>
+        <a class="waves-effect waves-light btn blue lighten-2" @click.prevent="submit">Add apartment</a>
       </div>
     </form>
   </div>
 </template>
 
 <script>
+import { eventBus } from "../../main";
 import Axios from "axios";
 export default {
   data() {
@@ -256,11 +257,11 @@ export default {
 
         const res = await Axios.post("/api/apartment", formData);
         console.log(res);
-        // eventBus.showMessage({
-        //   message: "You have been successfully registrated!",
-        //   type: "success",
-        // });
-        // this.$router.push("/");
+        eventBus.showMessage({
+          message: "Successfully added apartment",
+          type: "success",
+        });
+        this.$router.push("/myApartments");
       } catch (error) {
         // eventBus.showMessage({ message: error?.response?.data, type: "error" });
         console.log(error);
@@ -291,7 +292,7 @@ export default {
 .imageBox {
   width: 30%;
   margin: 4px 1.33%;
-  border: 1px solid #1f1f1f48;
+  transition: opacity 0.25s ease-in;
   opacity: 0.7;
   display: inline-block;
 }
@@ -301,6 +302,7 @@ export default {
 }
 
 .imageBox img {
+  border: 1px solid #1f1f1f48;
   max-width: 100%;
 }
 </style>

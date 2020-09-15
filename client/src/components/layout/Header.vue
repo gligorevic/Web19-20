@@ -1,10 +1,16 @@
 <template>
   <nav>
-    <div class="nav-wrapper">
-      <a href="#" class="brand-logo" style="display: flex">
-        <i class="material-icons">card_travel</i>
-        <span>Apartments</span>
-      </a>
+    <div class="nav-wrapper blue-grey darken-1">
+      <router-link
+        to="/"
+        tag="li"
+        exact
+        class="brand-logo"
+        style="display: flex; cursor: pointer; font-family: cursive;"
+      >
+        <i class="material-icons animateIcon" style="margin: 0px 9px;">card_travel</i>
+        <span style="text-decoration: underline;">Apartments</span>
+      </router-link>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <router-link to="/" tag="li" active-class="active" exact>Home</router-link>
 
@@ -16,10 +22,34 @@
           exact
           v-if="isUserHost"
         >My apartments</router-link>
-        <router-link to="/users" tag="li" active-class="active" exact v-if="isUserLoggedIn && currentUser.role === 'ADMIN'">Users</router-link>
-        <router-link to="/reservations" tag="li" active-class="active" exact v-if="isUserLoggedIn && currentUser.role === 'ADMIN'">Reservations</router-link>
-        <router-link to="/reservationshost" tag="li" active-class="active" exact v-if="isUserLoggedIn && currentUser.role === 'HOST'">Reservations</router-link>
-        <router-link to="/reservationsguest" tag="li" active-class="active" exact v-if="isUserLoggedIn && currentUser.role === 'GUEST'">Reservations</router-link>
+        <router-link
+          to="/users"
+          tag="li"
+          active-class="active"
+          exact
+          v-if="isUserLoggedIn && currentUser.role === 'ADMIN'"
+        >Users</router-link>
+        <router-link
+          to="/reservations"
+          tag="li"
+          active-class="active"
+          exact
+          v-if="isUserLoggedIn && currentUser.role === 'ADMIN'"
+        >Reservations</router-link>
+        <router-link
+          to="/reservationshost"
+          tag="li"
+          active-class="active"
+          exact
+          v-if="isUserLoggedIn && currentUser.role === 'HOST'"
+        >Reservations</router-link>
+        <router-link
+          to="/reservationsguest"
+          tag="li"
+          active-class="active"
+          exact
+          v-if="isUserLoggedIn && currentUser.role === 'GUEST'"
+        >Reservations</router-link>
         <li v-if="isUserLoggedIn">
           <span href="#" @click="logout">Logout</span>
         </li>
@@ -37,7 +67,7 @@ import { eventBus } from "../../main";
 export default {
   data: () => ({
     isUserLoggedIn: eventBus.isUserLoggedIn,
-    currentUser: eventBus.currentUser
+    currentUser: eventBus.currentUser,
   }),
   methods: {
     logout() {
@@ -63,5 +93,22 @@ export default {
 #nav-mobile > li {
   padding: 0px 15px;
   cursor: pointer;
+}
+
+.animateIcon {
+  display: inline-block;
+  animation: kreep 0.75s ease 2s infinite alternate;
+}
+
+@keyframes kreep {
+  0% {
+    transform: scale(1.1, 0.9) rotate(0);
+  }
+  50% {
+    transform: scale(0.9, 1.1) translateY(-0.5rem);
+  }
+  70% {
+    transform: scale(1);
+  }
 }
 </style>

@@ -15,7 +15,6 @@ public class ImageController {
 	@GET
 	@Path("/{id}/{filename}")
     public Response loadAsResource(@PathParam("id") Long id, @PathParam("filename") String filename) throws IOException {
-		System.out.println("\n\n\n GADJA ME");
 		File f = new File("images/" + id + "/" + filename);
 		
 		if (!f.exists()) {
