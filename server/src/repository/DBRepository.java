@@ -2,6 +2,7 @@ package repository;
 
 import domain.Amenity;
 import domain.Apartment;
+import domain.Reservation;
 import domain.User;
 import repository.streams.JSONFileStream;
 
@@ -9,18 +10,27 @@ public class DBRepository {
 	private UserRepository userRepository;
 	private ApartmentRepository apartmentRepository;
 	private AmenityRepository amenityRepository;
+	private ReservationRepository reservationRepository;
 	
 	public DBRepository() {
 		initUserRepository();
 		initApartmentRepository();
 		initAmenityRepository();
+		initReservationRepository();
 	}
 
 	private void initAmenityRepository() {
 		JSONFileStream<Amenity> jsonFileStream = new JSONFileStream<Amenity>("amenity.txt", Amenity.class);
 		LongIdGenerator lidgen = new LongIdGenerator();
 		lidgen.initializeId(Long.valueOf(jsonFileStream.readAll().size()));
-		this.amenityRepository = new AmenityRepository(jsonFileStream, lidgen);	
+		this.amenityRepository = new AmenityRepository(jsonFileStream, lidgen);		
+	}
+	
+	private void initReservationRepository() {
+		JSONFileStream<Reservation> jsonFileStream = new JSONFileStream<Reservation>("reservations.txt",Reservation.class);
+		LongIdGenerator lidgen = new LongIdGenerator();
+		lidgen.initializeId(Long.valueOf(jsonFileStream.readAll().size()));
+		this.reservationRepository = new ReservationRepository(jsonFileStream, lidgen);
 	}
 
 	private void initUserRepository() {
@@ -35,6 +45,10 @@ public class DBRepository {
 		LongIdGenerator lidgen = new LongIdGenerator();
 		lidgen.initializeId(Long.valueOf(jsonFileStream.readAll().size()));
 		this.apartmentRepository = new ApartmentRepository(jsonFileStream, lidgen);		
+	}
+	
+	public ReservationRepository getReservationRepository() {
+		return this.reservationRepository;
 	}
 	
 	public UserRepository getUserRepository() {

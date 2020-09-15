@@ -3,6 +3,7 @@ package domain;
 import java.util.Date;
 
 import domain.interfaces.iIdentifiable;
+import dto.ReservationDTO;
 
 enum ReservationStatus {
 	CREATED, REJECTED, WITHDRAWN, ACCEPTED, FINISHED
@@ -18,6 +19,16 @@ public class Reservation implements iIdentifiable<Long> {
 	private User guest;
 	private ReservationStatus reservationStatus;
 	private Boolean deleted;
+	
+	public Reservation() {
+		
+	}
+	
+	public Reservation(ReservationDTO newRes) {
+		this.nightsNum = newRes.getNightsNum();
+		this.price = newRes.getPrice();
+		this.reservationMessage = newRes.getReservationMessage();
+	}
 	
 	@Override
 	public Long getId() {

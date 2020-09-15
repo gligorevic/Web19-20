@@ -81,7 +81,7 @@
                 <div class="card-action">
                       <a v-if="checkStatusAccept(res)" class="waves-effect waves-light btn  green">Accept</a>
                       <a v-if="checkStatusReject(res)" class="waves-effect waves-light btn  red">Reject</a>
-                      <a class="waves-effect waves-light btn  grey">Finish</a>
+                      <a v-if="checkReservationDate(res.startReservationDate, res.nightsNum)" class="waves-effect waves-light btn  grey">Finish</a>
                 </div>
               </div>
             </div>
@@ -118,11 +118,18 @@ export default {
       }
     },
     checkStatusAccept(res){
-      return ['CREATED'].includes(res.reservationStatus);
+      return ['CREATED'].includes(res.reservationStatus) && 
+      (Date.parse(res.startReservationDate) + res.nightsNum * (86400000) > (Date.now()));
     },
     checkStatusReject(res){
-      return ['CREATED' , 'ACCEPTED'].includes(res.reservationStatus);
-    }
+      return ['CREATED' , 'ACCEPTED'].includes(res.reservationStatus) && 
+      (Date.parse(res.startReservationDate) + res.nightsNum * (86400000) > (Date.now()));
+    },
+    checkReservationDate(date ,nights){
+      console.log(Date.parse(date) + nights * (86400000) , Date.now() , "TEXT")
+      return (Date.parse(date) + nights * (86400000) < (Date.now()))
+       
+    },
   },
   computed: {
     filteredRes: function(){

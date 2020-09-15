@@ -6,7 +6,7 @@ export default [
         roomNumber: 15,
         pricePerNight: 25.0 
     },
-    startReservationDate: "2020-11-15T04:34:46.928Z",
+    startReservationDate: "2020-07-02T04:34:46.928Z",
     nightsNum: 5,
     price: 225.0,
     reservationMessage: "HelloWorld",
@@ -102,7 +102,7 @@ export default [
       gender: "MALE",
       role: "GUEST",
     },
-    reservationStatus: "REJECTED",
+    reservationStatus: "CREATED",
   },
   {
     id: 6,
