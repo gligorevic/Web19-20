@@ -5,7 +5,7 @@ import domain.interfaces.iIdentifiable;
 public class Amenity implements iIdentifiable<Long> {
 	private Long id;
 	private String name;
-	private Boolean deleted;
+	private Boolean deleted = false;
 	
 	@Override
 	public Long getId() {

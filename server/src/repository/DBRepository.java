@@ -1,5 +1,6 @@
 package repository;
 
+import domain.Amenity;
 import domain.Apartment;
 import domain.User;
 import repository.streams.JSONFileStream;
@@ -7,10 +8,19 @@ import repository.streams.JSONFileStream;
 public class DBRepository {
 	private UserRepository userRepository;
 	private ApartmentRepository apartmentRepository;
+	private AmenityRepository amenityRepository;
 	
 	public DBRepository() {
 		initUserRepository();
 		initApartmentRepository();
+		initAmenityRepository();
+	}
+
+	private void initAmenityRepository() {
+		JSONFileStream<Amenity> jsonFileStream = new JSONFileStream<Amenity>("amenity.txt", Amenity.class);
+		LongIdGenerator lidgen = new LongIdGenerator();
+		lidgen.initializeId(Long.valueOf(jsonFileStream.readAll().size()));
+		this.amenityRepository = new AmenityRepository(jsonFileStream, lidgen);	
 	}
 
 	private void initUserRepository() {
@@ -33,5 +43,9 @@ public class DBRepository {
 	
 	public ApartmentRepository getApartmentRepository() {
 		return this.apartmentRepository;
+	}
+	
+	public AmenityRepository getAmenityRepository() {
+		return this.amenityRepository;
 	}
 }

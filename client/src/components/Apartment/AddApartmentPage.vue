@@ -139,6 +139,10 @@
       </div>
       <div class="col s4 formPart">
         <h5>Amenities:</h5>
+        <div v-for="amenity in allAmenities" :key="amenity.name" style="text-align: left;">
+          <input type="checkbox" :value="amenity.name" :id="amenity.name" @input="setAmenities" />
+          <label :for="amenity.name">{{amenity.name}}</label>
+        </div>
       </div>
       <div class="col s1" style="width: 20px;"></div>
       <div class="col s7 formPart">
@@ -165,17 +169,19 @@
         </div>
       </div>
       <div class="col s12">
-        <a class="waves-effect waves-light btn" @click.prevent="submit">Add apartment</a>
+        <a class="waves-effect waves-light btn blue lighten-2" @click.prevent="submit">Add apartment</a>
       </div>
     </form>
   </div>
 </template>
 
 <script>
+import { eventBus } from "../../main";
 import Axios from "axios";
 export default {
   data() {
     return {
+      allAmenities: [],
       today: new Date().toISOString().split("T")[0],
       images: [],
       apartment: {
@@ -188,6 +194,7 @@ export default {
         pricePerNight: 1,
         checkInTime: "",
         checkOutTime: "",
+        amenities: [],
         status: "INACTIVE",
       },
       location: {
@@ -204,6 +211,14 @@ export default {
     };
   },
   methods: {
+    setAmenities(e) {
+      console.log(e.target.value);
+      e.target.checked
+        ? this.apartment.amenities.push(
+            this.allAmenities.find((a) => a.name == e.target.value)
+          )
+        : this.apartment.filter((a) => a.name != e.target.value);
+    },
     handleChangeImages(e) {
       this.images = Array.from(e.target.files).map((file) => ({
         url: URL.createObjectURL(file),
@@ -242,16 +257,24 @@ export default {
 
         const res = await Axios.post("/api/apartment", formData);
         console.log(res);
-        // eventBus.showMessage({
-        //   message: "You have been successfully registrated!",
-        //   type: "success",
-        // });
-        // this.$router.push("/");
+        eventBus.showMessage({
+          message: "Successfully added apartment",
+          type: "success",
+        });
+        this.$router.push("/myApartments");
       } catch (error) {
         // eventBus.showMessage({ message: error?.response?.data, type: "error" });
         console.log(error);
       }
     },
+  },
+  async created() {
+    try {
+      const res = await Axios.get("/api/amenity");
+      this.allAmenities = res.data;
+    } catch (err) {
+      console.log(err);
+    }
   },
 };
 </script>
@@ -269,7 +292,7 @@ export default {
 .imageBox {
   width: 30%;
   margin: 4px 1.33%;
-  border: 1px solid #1f1f1f48;
+  transition: opacity 0.25s ease-in;
   opacity: 0.7;
   display: inline-block;
 }
@@ -279,6 +302,7 @@ export default {
 }
 
 .imageBox img {
+  border: 1px solid #1f1f1f48;
   max-width: 100%;
 }
 </style>

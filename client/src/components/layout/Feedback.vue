@@ -37,7 +37,7 @@ export default {
 .feedbackPopup {
   z-index: 130;
   padding: 30px;
-  position: absolute;
+  position: fixed;
   bottom: 40px;
   right: 40px;
   background: white;
@@ -46,11 +46,11 @@ export default {
   width: 22%;
 }
 .success {
-  background: #92f09288;
+  background: #4caf4ff8;
 }
 
 .error {
-  background: #f5513b8e;
+  background: #f44336f1;
 }
 
 .close {
