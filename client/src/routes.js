@@ -5,7 +5,10 @@ import Users from "./components/User/Users.vue";
 
 import Home from "./components/Apartment/Home.vue";
 import MyApartments from "./components/Apartment/MyApartments.vue";
+import AllApartments from "./components/Apartment/AllApartments.vue";
+
 import AddApartment from "./components/Apartment/AddApartmentPage.vue";
+import EditApartmentPage from "./components/Apartment/EditApartmentPage.vue";
 import ApartmentView from "./components/Apartment/ApartmentView.vue";
 
 import Reservations from "./components/Reservation/Reservations.vue";
@@ -38,7 +41,23 @@ export const routes = [
     component: ApartmentView,
     meta: {
       auth: true,
-      roleRequired: ["HOST"],
+      roleRequired: ["HOST", "ADMIN"],
+    },
+  },
+  {
+    path: "/apartment/:id/edit",
+    component: EditApartmentPage,
+    meta: {
+      auth: true,
+      roleRequired: ["HOST", "ADMIN"],
+    },
+  },
+  {
+    path: "/allApartments",
+    component: AllApartments,
+    meta: {
+      auth: true,
+      roleRequired: ["ADMIN"],
     },
   },
   {
