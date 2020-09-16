@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response.Status;
 
 import domain.Amenity;
 import domain.Role;
+import exception.CustomException;
 import security.Secured;
 import service.AmenityService;
 
@@ -56,6 +57,8 @@ public class AmenityController {
 	public Response updateAmenity(@PathParam("id") Long id, Amenity amenity) {
 		try {
 			return Response.ok().entity(amenityService.editAmenityById(id, amenity)).build();
+		} catch (CustomException e) {
+			return Response.status(e.getStatus()).entity(e.getMessage()).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
@@ -70,6 +73,8 @@ public class AmenityController {
 	public Response createAmenity(Amenity amenity) {
 		try {
 			return Response.ok().entity(amenityService.createAmenity(amenity)).build();
+		} catch (CustomException e) {
+			return Response.status(e.getStatus()).entity(e.getMessage()).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();

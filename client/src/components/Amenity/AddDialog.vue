@@ -46,6 +46,10 @@ export default {
         });
         this.addedAmenity(res.data);
       } catch (err) {
+        eventBus.showMessage({
+          message: "Amenity with given name already exists!",
+          type: "error",
+        });
         console.log(err);
       }
     },
