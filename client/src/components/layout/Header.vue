@@ -30,6 +30,13 @@
           v-if="isUserAdmin"
         >All apartments</router-link>
         <router-link
+          to="/amenities"
+          tag="li"
+          active-class="active"
+          exact
+          v-if="isUserAdmin"
+        >Amenities</router-link>
+        <router-link
           to="/users"
           tag="li"
           active-class="active"

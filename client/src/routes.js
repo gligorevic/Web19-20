@@ -17,6 +17,8 @@ import ReservationsHost from "./components/Reservation/ReservationsHost.vue";
 
 import ApartmentViewWraper from "./components/Apartment/Home/ApartmentViewWraper.vue";
 
+import Amenities from "./components/Amenity/Amenities.vue";
+
 // import { eventBus } from "./main";
 
 export const routes = [
@@ -55,6 +57,14 @@ export const routes = [
   {
     path: "/allApartments",
     component: AllApartments,
+    meta: {
+      auth: true,
+      roleRequired: ["ADMIN"],
+    },
+  },
+  {
+    path: "/amenities",
+    component: Amenities,
     meta: {
       auth: true,
       roleRequired: ["ADMIN"],
