@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <app-apartment-details :apartment="apartment" v-if="apartment"></app-apartment-details>
-    <app-comments :comments="comments" v-if="apartment"></app-comments>
+    <app-comments :comments="comments" v-if="apartment" :hostId="apartment.host.id"></app-comments>
   </div>
 </template>
 
@@ -12,9 +12,7 @@ import Comments from "./Home/Comments";
 
 export default {
   data() {
-    return { apartment: null,
-    comments: [],
-     };
+    return { apartment: null, comments: [] };
   },
   components: {
     AppApartmentDetails: ApartmentDetails,
@@ -30,12 +28,12 @@ export default {
   },
   async created() {
     try {
-      const res = await Axios.get("/api/comments/" +this.$route.params.id);
+      const res = await Axios.get("/api/comments/" + this.$route.params.id);
       this.comments = res.data;
     } catch (err) {
       console.log(err);
     }
- }
+  },
 };
 </script>
 

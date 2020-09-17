@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response.Status;
@@ -12,6 +13,7 @@ import javax.ws.rs.core.Response.Status;
 import config.SecurityConstants;
 import domain.Apartment;
 import domain.Reservation;
+import domain.ReservationStatus;
 import domain.Role;
 import domain.User;
 import dto.ApartmentCardDTO;
@@ -50,7 +52,7 @@ public class ReservationService {
 	}
 	
 	public List<Date> getAllDatesForApartment(Long id , String token) {
-		List<Reservation> reservations = db.getReservationRepository().findReservationsForApartment(id);
+		List<Reservation> reservations = db.getReservationRepository().findReservationsForApartment(id).stream().filter(r -> r.getReservationStatus() == ReservationStatus.ACCEPTED).collect(Collectors.toList());
 		List<Date> dates = new ArrayList<Date>();
 		
 		for(Reservation res : reservations) {
@@ -69,7 +71,7 @@ public class ReservationService {
 	
 	public Reservation changeReservationStatus(String status,Long id,String token) throws CustomException {
 		Reservation reservation = db.getReservationRepository().findById(id);
-		
+
 		if (reservation == null)
 			throw new CustomException("Unauthorized", Status.UNAUTHORIZED);
 		

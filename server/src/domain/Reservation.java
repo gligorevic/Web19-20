@@ -5,9 +5,6 @@ import java.util.Date;
 import domain.interfaces.iIdentifiable;
 import dto.ReservationDTO;
 
-enum ReservationStatus {
-	CREATED, REJECTED, WITHDRAWN, ACCEPTED, FINISHED
-}
 
 public class Reservation implements iIdentifiable<Long> {
 	private Long id;

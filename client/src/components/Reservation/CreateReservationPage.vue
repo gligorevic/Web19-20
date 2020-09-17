@@ -3,50 +3,60 @@
     <div class="container center">
       <div class="card formCard">
         <div @click.prevent="closeDialog" class="closeButton">
-            <i class="material-icons">close</i>
+          <i class="material-icons">close</i>
         </div>
         <h2 class="addMargin">Make A Reservation</h2>
         <form>
           <div>
-              <datepicker 
-              placeholder="Select Date" 
-              v-model="state.date" 
+            <datepicker
+              placeholder="Select Date"
+              v-model="state.date"
               inline
               :selected-date="state.date"
-              :disabled-dates="state.disabledDates">
-              </datepicker>
+              :disabled-dates="state.disabledDates"
+            ></datepicker>
           </div>
           <div class="row">
             <span style="float:left">Leave a comment for your Host:</span>
-            <textarea v-model="reservation.reservationMessage"
-             class="textarea" 
-             id="textarea" 
-             name="textarea" 
-             rows="6" 
-             cols="50" >
-            </textarea>
-          </div>  
+            <textarea
+              v-model="reservation.reservationMessage"
+              class="textarea"
+              id="textarea"
+              name="textarea"
+              rows="6"
+              cols="50"
+            ></textarea>
+          </div>
           <div class="row">
             <div class="input-field col s4">
-              <input id="nightsNum" type="number" min="1" class="validate" v-model="reservation.nightsNum" />
+              <input
+                id="nightsNum"
+                type="number"
+                min="1"
+                class="validate"
+                v-model="reservation.nightsNum"
+              />
               <label for="nightsNum" class="active">Number of nights:</label>
             </div>
             <div class="input-field col s4 offset-s4">
-              <label class="totalPrice">Total: <b>${{calculatePrice}}</b>
+              <label class="totalPrice">
+                Total:
+                <b>${{calculatePrice}}</b>
               </label>
-              <br/>
-            </div>  
+              <br />
+            </div>
           </div>
           <div class="row">
             <div class="col s4 offset-s4">
-              <button class="waves-effect waves-light btn resButton"
-              name="action"
-              @click.prevent="submit"
+              <button
+                class="waves-effect waves-light btn resButton blue lighten-2"
+                name="action"
+                @click.prevent="submit"
               >Submit</button>
             </div>
-          </div>  
-        </form>  
-       </div>  
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -54,39 +64,40 @@
 <script>
 import Axios from "axios";
 import { eventBus } from "@/main";
-import Datepicker from 'vuejs-datepicker';
-
+import Datepicker from "vuejs-datepicker";
 
 export default {
-  props:["closeDialog" , "apartment" , "datesRes"],
+  props: ["closeDialog", "apartment", "datesRes"],
 
-  data(){
-    return{ 
-      state:{
-       date: new Date(),
-        disabledDates:{
-          to:new Date(),
+  data() {
+    return {
+      state: {
+        date: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+        disabledDates: {
+          to: new Date(),
           dates: this.datesRes,
-        }
+        },
       },
-      reservation:{
-        apartmentId:  "",
+      reservation: {
+        apartmentId: "",
         startReservationDate: "",
         nightsNum: undefined,
-        price: 0,  
+        price: 0,
         reservationMessage: "",
-        guestId:0,
+        guestId: 0,
         reservationStatus: "",
-      }
-    }
+      },
+    };
   },
-  components:{
-    Datepicker
+  components: {
+    Datepicker,
   },
   methods: {
     async submit() {
-      try{
-        this.reservation.startReservationDate = this.state.date.toISOString().split("T")[0];
+      try {
+        this.reservation.startReservationDate = this.state.date
+          .toISOString()
+          .split("T")[0];
         this.reservation.nightsNum = parseInt(this.reservation.nightsNum);
         this.reservation.price = this.calculatePrice;
         await Axios.post(`/api/reservations`, this.reservation);
@@ -95,52 +106,51 @@ export default {
           type: "success",
         });
         this.closeDialog();
-      }catch(error){
+      } catch (error) {
         eventBus.showMessage({ message: error?.response?.data, type: "error" });
         console.log(error);
       }
-    }
-
+    },
   },
   created() {
-    this.reservation.apartmentId = {...this.apartment}.id;
+    this.reservation.apartmentId = { ...this.apartment }.id;
     this.reservation.guestId = parseInt(eventBus.currentUser.id, 10);
   },
   computed: {
     calculatePrice() {
-      let a = {...this.apartment}.pricePerNight * this.reservation.nightsNum;
-      if(isNaN(a)){
+      let a = { ...this.apartment }.pricePerNight * this.reservation.nightsNum;
+      if (isNaN(a)) {
         return 0;
-      }else { 
-        return a }
+      } else {
+        return a;
+      }
     },
   },
-  
-}
+};
 </script>
 
 <style scoped>
- .closeButton {
+.closeButton {
   position: absolute;
   top: 12px;
   right: 15px;
   cursor: pointer;
 }
 
-.textarea{
+.textarea {
   height: 100px;
   color: black;
   background-color: white;
 }
 
-.resButton{
-  display:block;
+.resButton {
+  display: block;
   width: 100%;
 }
 
 .cover {
   position: absolute;
-  bottom: 0;
+  left: 0;
   top: 0;
   display: flex;
   justify-content: center;
@@ -152,7 +162,7 @@ export default {
   background: #25252562;
 }
 .formCard {
-  height: 100%;   /* ISPRAVITI NA DINAMCKI */
+  height: 100%; /* ISPRAVITI NA DINAMCKI */
   min-width: 50%;
   padding: 0 60px;
   margin-top: 30px;
