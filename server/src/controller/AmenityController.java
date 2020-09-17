@@ -24,7 +24,6 @@ public class AmenityController {
 	private AmenityService amenityService;
 
 	@GET
-	@Secured({Role.ADMIN, Role.HOST})
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllAmenities() {
 		try {

@@ -286,7 +286,9 @@ export default {
           message: "Successfully edited apartment",
           type: "success",
         });
-        this.$router.push("/allApartments");
+        eventBus.currentUser.role === "ADMIN"
+          ? this.$router.push("/allApartments")
+          : this.$router.push("/myApartments");
       } catch (error) {
         // eventBus.showMessage({ message: error?.response?.data, type: "error" });
         console.log(error);

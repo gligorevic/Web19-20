@@ -20,6 +20,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import domain.Apartment;
 import domain.Role;
+import dto.SearchApartmentDTO;
 import exception.CustomException;
 import security.Secured;
 import service.ApartmentService;
@@ -137,6 +138,20 @@ public class ApartmentController {
 			return Response.ok().entity(apartmentService.deleteApartment(id, status, token)).build();
 		} catch (CustomException e) {
 			return Response.status(e.getStatus()).entity(e.getMessage()).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+
+	}
+	
+	@POST
+	@Path("/search")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createApartmenet(SearchApartmentDTO searchData) {
+		try {
+			return Response.ok().entity(apartmentService.searchApartments(searchData)).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();

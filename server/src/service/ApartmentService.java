@@ -23,6 +23,7 @@ import domain.Apartment;
 import domain.Role;
 import domain.User;
 import dto.ApartmentCardDTO;
+import dto.SearchApartmentDTO;
 import exception.CustomException;
 import repository.DBRepository;
 
@@ -154,6 +155,19 @@ public class ApartmentService {
 		db.getApartmentRepository().update(apartmentToBeChanged);
 		apartment.setHost(null);
 		return apartment;
+	}
+
+	public List<ApartmentCardDTO> searchApartments(SearchApartmentDTO searchData) {
+		List<Apartment> apartments = db.getApartmentRepository().findAll();
+		
+		List<ApartmentCardDTO> apartmentDTOs = apartments.stream().filter(a -> !a.getDeleted() && a.getStatus() == domain.Status.ACTIVE && a.getPricePerNight() >= searchData.getPriceFrom() && (a.getPricePerNight() <= searchData.getPriceTo() || searchData.getPriceTo() == 100 )
+				&& a.getGuestNumber() == searchData.getGuestNumber() 
+				&& a.getRoomNumber() >= searchData.getMinRoomNumber() && a.getRoomNumber() <= searchData.getMaxRoomNumber()
+				&& (a.getLocation().getAddress().getCountry().toLowerCase().contains(searchData.getCountry().toLowerCase()) || searchData.getCountry().toLowerCase().contains(a.getLocation().getAddress().getCountry().toLowerCase()))
+				&& ((a.getLocation().getAddress().getCity().toLowerCase().contains(searchData.getCity().toLowerCase()) || searchData.getCity().toLowerCase().contains(a.getLocation().getAddress().getCity().toLowerCase()))))
+				.map(a -> new ApartmentCardDTO(a)).collect(Collectors.toList());
+		
+		return apartmentDTOs;
 	}
 
 }
