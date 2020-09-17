@@ -8,7 +8,9 @@ import org.glassfish.jersey.server.ResourceConfig;
 import config.ApplicationBinder;
 import controller.AmenityController;
 import controller.ApartmentController;
+import controller.CommentController;
 import controller.ImageController;
+import controller.ReservationController;
 import controller.UserController;
 import security.AuthenticationFilter;
 
@@ -23,7 +25,8 @@ public class WebApp extends ResourceConfig {
 		register(AmenityController.class);
 		register(new ApplicationBinder());
 		register(AuthenticationFilter.class);
-		
+		register(ReservationController.class);
+		register(CommentController.class);
 		
     }
 	

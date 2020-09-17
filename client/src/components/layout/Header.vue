@@ -15,6 +15,7 @@
         <router-link to="/" tag="li" active-class="active" exact>Home</router-link>
 
         <router-link to="/user" tag="li" active-class="active" exact v-if="isUserLoggedIn">Profile</router-link>
+        
         <router-link
           to="/myApartments"
           tag="li"

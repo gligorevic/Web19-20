@@ -28,9 +28,9 @@ public class UserService {
 
 	public List<UserDTO> findAll() {
 		List<UserDTO> users = new ArrayList<UserDTO>();
+
 		db.getUserRepository().findAll().stream().forEach(user -> users.add(new UserDTO(user)));
-		;
-		return users;
+ 		return users;
 	}
 
 	public String register(UserDTO newUser) throws CustomException {
@@ -83,7 +83,7 @@ public class UserService {
 		return new UserDTO(user);
 	}
 
-	private Long getIdFromJWT(String token) {
+	public Long getIdFromJWT(String token) {
 		try {
 			Claims claims = Jwts.parser().setSigningKey(SecurityConstants.SECRET).parseClaimsJws(token.substring(7))
 					.getBody();

@@ -78,9 +78,29 @@
                       Total price:<b> ${{res.price}} </b>
                     </div>
                   </div>
+                  <div class="row" v-if="commentArea && res.id===commentShowId">
+                    <form action="#" >
+                      Rate your stay:
+                      <input type="radio" id="star1" value="1" v-model="rating">
+                      <label for="star1">Awful</label>
+                      <input type="radio" id="star2" value="2" v-model="rating">
+                      <label for="star2">Bad</label>
+                      <input type="radio" id="star3" value="3" v-model="rating">
+                      <label for="star3">OK</label>
+                      <input type="radio" id="star4" value="4" v-model="rating">
+                      <label for="star4">Very nice</label>
+                      <input type="radio" id="star5" value="5" v-model="rating">
+                      <label for="star5">Perfect!</label>
+                    </form>
+                    <textarea v-model="comment.text" class="textarea" id="textarea" name="textare" rows="6" cols="50" >
+                    </textarea>
+                    <div class="col s2 offset-s5">
+                    <a class="waves-effect waves-light btn green" @click="submitComment(res)">Submit</a>
+                    </div>
+                  </div> 
                 <div class="card-action">
-                   <a v-if="checkStatusWithdraw(res)" class="waves-effect waves-light red btn ">Withdraw</a>
-                   <a v-if="checkStatusComment(res)" class="waves-effect waves-light btn grey">Comment</a>
+                   <a v-if="checkStatusWithdraw(res)" @click="changeStatus(res.id, 'WITHDRAWN')" class="waves-effect waves-light red btn ">Withdraw</a>
+                   <a v-if="checkStatusComment(res)" @click="showCommentArea(res.id)" class="waves-effect waves-light btn grey">Comment</a>
                 </div>  
               </div>
             </div>
@@ -91,18 +111,68 @@
 </template>
 
 <script>
-import reservations from '@/mock/mockRes'
+import Axios from "axios";
+import { eventBus } from "@/main";
 
 export default {
   data(){
     return{
-      reservations,
+      reservations: [],
       search:'',
       sort:'',
       statusFilter:[],
+      commentArea:false,
+      commentShowId:undefined,
+      rating:"",
+      comment:{
+        text:"" ,
+        grade:0,
+        apartmentId:undefined,
+        reservationId:undefined,
+      }
+     }
+  },
+  async created() {
+    try {
+      Axios.get(`/api/reservations`).then(response => this.reservations = response.data)
+    } catch (err) {
+      console.log(err);
     }
   },
   methods: {
+    async submitComment(res) {
+      try{
+        this.comment.apartmentId = res.reservedApartment.id;
+        this.comment.reservationId= res.id;
+        this.comment.grade = parseInt(this.rating, 10);
+        await Axios.post(`/api/comments`, this.comment);
+        eventBus.showMessage({
+          message: "You have successfully added comment!",
+          type: "success",
+        });
+        this.showCommentArea();
+      }catch(error){
+        eventBus.showMessage({ message: error?.response?.data, type: "error" });
+        console.log(error);
+      }
+    },
+    async changeStatus(id,status){
+      try {
+        for(const x in this.reservations){
+          if(x.id == id){
+            x.reservationStatus = status;
+          }
+        }
+        await Axios.put(`/api/reservations/${id}/status` , status);
+
+        eventBus.showMessage({
+          message: "You have successfully changed reservation status !",
+          type: "success",
+        });
+      } catch (error) {
+        eventBus.showMessage({ message: error?.response?.data, type: "error" });
+      }
+    },
     sortReservations(){
       if(this.sort === '' || this.sort === 'DESC'){
         this.sort = 'ASC';
@@ -116,11 +186,17 @@ export default {
         })
       }
     },
+    showCommentArea(res) {
+      this.commentArea = !this.commentArea;
+      this.commentShowId = res;
+      this.comment.text = "";
+      this.rating = 0;
+    },
     checkStatusWithdraw(res){
       return ['CREATED' , 'ACCEPTED'].includes(res.reservationStatus);
     },
     checkStatusComment(res){
-      return['FINISHED' , 'REJECTED'].includes(res.reservationStatus);
+      return['FINISHED' , 'REJECTED'].includes(res.reservationStatus) && (res.commented === false);
     }
   },
   computed: {
@@ -140,6 +216,11 @@ export default {
 
 
 <style scoped>
+.textarea{
+  color: black;
+  background-color: white;
+}
+
 label{
   padding: 0 20px;
   font-weight: bold;

@@ -79,9 +79,9 @@
                     </div>
                   </div>
                 <div class="card-action">
-                      <a v-if="checkStatusAccept(res)" class="waves-effect waves-light btn  green">Accept</a>
-                      <a v-if="checkStatusReject(res)" class="waves-effect waves-light btn  red">Reject</a>
-                      <a class="waves-effect waves-light btn  grey">Finish</a>
+                      <a v-if="checkStatusAccept(res)" @click="changeStatus(res.id, 'ACCEPTED')" class="waves-effect waves-light btn  green">Accept</a>
+                      <a v-if="checkStatusReject(res)" @click="changeStatus(res.id, 'REJECTED')" class="waves-effect waves-light btn  red">Reject</a>
+                      <a v-if="checkReservationDate(res)" @click="changeStatus(res.id, 'FINISHED')" class="waves-effect waves-light btn  grey">Finish</a>
                 </div>
               </div>
             </div>
@@ -92,18 +92,42 @@
 </template>
 
 <script>
-import reservations from '@/mock/mockRes'
-
+import Axios from "axios";
+import { eventBus } from "@/main";
 export default {
   data(){
     return{
-      reservations,
+      reservations: [],
       search:'',
       sort:'',
       statusFilter:[],
     }
   },
+  async created() {
+    try {
+      Axios.get(`/api/reservations`).then(response => this.reservations = response.data)
+    } catch (err) {
+      console.log(err);
+    }
+  },
   methods: {
+    async changeStatus(id,status){
+      try {
+        for(const x in this.reservations){
+          if(x.id == id){
+            x.reservationStatus == status;
+          }
+        }
+        await Axios.put(`/api/reservations/${id}/status`,status);
+
+        eventBus.showMessage({
+          message: "You have successfully changed reservation status !",
+          type: "success",
+        });
+      } catch (error) {
+        eventBus.showMessage({ message: error?.response?.data, type: "error" });
+      }
+    },
     sortReservations(){
       if(this.sort === '' || this.sort === 'DESC'){
         this.sort = 'ASC';
@@ -118,11 +142,18 @@ export default {
       }
     },
     checkStatusAccept(res){
-      return ['CREATED'].includes(res.reservationStatus);
+      return ['CREATED'].includes(res.reservationStatus) && 
+      (new Date((res.startReservationDate) + res.nightsNum * (86400000)) > (Date.now()));
     },
     checkStatusReject(res){
-      return ['CREATED' , 'ACCEPTED'].includes(res.reservationStatus);
-    }
+      return ['CREATED' , 'ACCEPTED'].includes(res.reservationStatus) && 
+      (new Date((res.startReservationDate) + res.nightsNum * (86400000)) > (Date.now()));
+    },
+    checkReservationDate(res){
+      return (new Date((res.startReservationDate) + res.nightsNum * (86400000)) < (Date.now())) &&
+      ['ACCEPTED'].includes(res.reservationStatus)
+       
+    },
   },
   computed: {
     filteredRes: function(){

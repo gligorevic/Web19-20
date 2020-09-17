@@ -3,6 +3,7 @@ package domain;
 import java.util.Date;
 
 import domain.interfaces.iIdentifiable;
+import dto.ReservationDTO;
 
 enum ReservationStatus {
 	CREATED, REJECTED, WITHDRAWN, ACCEPTED, FINISHED
@@ -16,8 +17,19 @@ public class Reservation implements iIdentifiable<Long> {
 	private float price;
 	private String reservationMessage;
 	private User guest;
-	private ReservationStatus reservationStatus;
-	private Boolean deleted;
+	private ReservationStatus reservationStatus = ReservationStatus.CREATED;
+	private Boolean commented = false;
+	private Boolean deleted = false;
+	
+	public Reservation() {
+		
+	}
+	
+	public Reservation(ReservationDTO newRes) {
+		this.nightsNum = newRes.getNightsNum();
+		this.price = newRes.getPrice();
+		this.reservationMessage = newRes.getReservationMessage();
+	}
 	
 	@Override
 	public Long getId() {
@@ -27,6 +39,16 @@ public class Reservation implements iIdentifiable<Long> {
 	@Override
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	
+
+	public Boolean getCommented() {
+		return commented;
+	}
+
+	public void setCommented(Boolean commented) {
+		this.commented = commented;
 	}
 
 	public Apartment getReservedApartment() {
@@ -81,8 +103,8 @@ public class Reservation implements iIdentifiable<Long> {
 		return reservationStatus;
 	}
 
-	public void setReservationStatus(ReservationStatus reservationStatus) {
-		this.reservationStatus = reservationStatus;
+	public void setReservationStatus(String reservationStatus) {
+		this.reservationStatus = ReservationStatus.valueOf(reservationStatus);
 	}
 
 	public Boolean getDeleted() {
