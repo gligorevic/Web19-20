@@ -1,6 +1,6 @@
 <template>
   <div class="container center">
-    <h2>Create new apartment</h2>
+    <h2>Edit apartment</h2>
     <form
       class="row"
       style="display:flex; align-items: stretch; flex-wrap: wrap; justify-content: space-between;"
@@ -10,16 +10,16 @@
         <div class="row">
           <div class="input-field col s6">
             <input id="country" type="text" class="validate" v-model="location.address.country" />
-            <label for="country">Country</label>
+            <label class="active" for="country">Country</label>
           </div>
           <div class="input-field col s6">
             <input id="city" type="text" class="validate" v-model="location.address.city" />
-            <label for="city">City</label>
+            <label class="active" for="city">City</label>
           </div>
 
           <div class="input-field col s6">
             <input id="street" type="text" class="validate" v-model="location.address.street" />
-            <label for="street">Street</label>
+            <label class="active" for="street">Street</label>
           </div>
           <div class="input-field col s3">
             <input
@@ -29,7 +29,7 @@
               min="0"
               v-model="location.address.houseNumber"
             />
-            <label for="houseNumber">HouseNum</label>
+            <label class="active" for="houseNumber">HouseNum</label>
           </div>
           <div class="input-field col s3">
             <input
@@ -39,15 +39,15 @@
               class="validate"
               v-model="location.address.postal"
             />
-            <label for="postal">Postal</label>
+            <label class="active" for="postal">Postal</label>
           </div>
           <div class="input-field col s6">
             <input id="latitude" type="number" class="validate" v-model="location.latitude" />
-            <label for="latitude">Latitude</label>
+            <label class="active" for="latitude">Latitude</label>
           </div>
           <div class="input-field col s6">
             <input id="longitude" type="number" class="validate" v-model="location.longitude" />
-            <label for="longitude">Longitude</label>
+            <label class="active" for="longitude">Longitude</label>
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@
         <div class="row">
           <div class="input-field col s12">
             <input id="name" type="text" class="validate" v-model="apartment.name" />
-            <label for="name">Name</label>
+            <label class="active" for="name">Name</label>
           </div>
           <div class="row col s12">
             <div class="col s4">Type:</div>
@@ -110,7 +110,7 @@
           </div>
         </div>
       </div>
-      <div class="col s7 formPart">
+      <div class="col s7 formPart" v-if="apartment">
         <h5>Dates:</h5>
         <div class="row">
           <div class="input-field col s6">
@@ -128,7 +128,7 @@
         <h5>Checkin/out:</h5>
         <div class="row">
           <div class="input-field col s6">
-            <input id="checkInTime" type="time" v-model="apartment.checkInTime" />
+            <input id="checkInTime" type="time" v-model="apartment.checkInTime" @change="c" />
             <label for="checkInTime" class="active">Checkin</label>
           </div>
           <div class="input-field col s6">
@@ -137,10 +137,16 @@
           </div>
         </div>
       </div>
-      <div class="col s4 formPart">
+      <div class="col s4 formPart" v-if="apartment.amenities">
         <h5>Amenities:</h5>
         <div v-for="amenity in allAmenities" :key="amenity.name" style="text-align: left;">
-          <input type="checkbox" :value="amenity.name" :id="amenity.name" @input="setAmenities" />
+          <input
+            type="checkbox"
+            :value="amenity.name"
+            :id="amenity.name"
+            @input="setAmenities"
+            :checked="apartment.amenities.some(a => a.id === amenity.id)"
+          />
           <label :for="amenity.name">{{amenity.name}}</label>
         </div>
       </div>
@@ -148,7 +154,7 @@
       <div class="col s7 formPart">
         <h5>Images:</h5>
         <div v-for="image in images" :key="image.name" class="imageBox">
-          <img :src="image.url" />
+          <img :src="image.url ? image.url : '/api/' + image" />
         </div>
         <div>
           <input
@@ -176,7 +182,7 @@
           class="waves-effect waves-light btn blue lighten-2"
           @click.prevent="submit"
           :disabled="isSomeFieldsEmpty"
-        >Add apartment</button>
+        >Edit apartment</button>
       </div>
     </form>
   </div>
@@ -218,13 +224,21 @@ export default {
     };
   },
   methods: {
+    c() {
+      console.log(typeof this.apartment.checkInTime);
+    },
     setAmenities(e) {
       console.log(e.target.value);
       e.target.checked
         ? this.apartment.amenities.push(
             this.allAmenities.find((a) => a.name == e.target.value)
           )
-        : this.apartment.filter((a) => a.name != e.target.value);
+        : (this.apartment.amenities = this.apartment.amenities.filter(
+            (a) => a.name != e.target.value
+          ));
+    },
+    msToTime(s) {
+      return new Date(s).toISOString().slice(11, -8);
     },
     handleChangeImages(e) {
       this.images = Array.from(e.target.files).map((file) => ({
@@ -237,7 +251,7 @@ export default {
       try {
         console.log(this.apartment, this.location);
         let formData = new FormData();
-
+        console.log(this.checkInTime);
         formData.append(
           "apartment",
           new Blob(
@@ -260,25 +274,45 @@ export default {
             }
           )
         );
-        this.images.forEach((img) => formData.append("file", img.file));
+        if (this.images.some((i) => i.url))
+          this.images.forEach((img) => formData.append("file", img.file));
 
-        const res = await Axios.post("/api/apartment", formData);
+        const res = await Axios.put(
+          `/api/apartment/${this.apartment.id}`,
+          formData
+        );
         console.log(res);
         eventBus.showMessage({
-          message: "Successfully added apartment",
+          message: "Successfully edited apartment",
           type: "success",
         });
-        this.$router.push("/myApartments");
+        eventBus.currentUser.role === "ADMIN"
+          ? this.$router.push("/allApartments")
+          : this.$router.push("/myApartments");
       } catch (error) {
         // eventBus.showMessage({ message: error?.response?.data, type: "error" });
         console.log(error);
       }
     },
   },
-  async created() {
+  async beforeCreate() {
     try {
-      const res = await Axios.get("/api/amenity");
-      this.allAmenities = res.data;
+      const res = await Axios.get("/api/apartment/" + this.$route.params.id);
+      this.apartment = res.data;
+      this.apartment.checkInTime = this.msToTime(res.data.checkInTime);
+      this.apartment.checkOutTime = this.msToTime(res.data.checkOutTime);
+      this.apartment.startDate = new Date(res.data.startDate)
+        .toISOString()
+        .split("T")[0];
+      this.apartment.endDate = new Date(res.data.endDate)
+        .toISOString()
+        .split("T")[0];
+      this.images = res.data.images;
+
+      this.location = res.data.location;
+      console.log(res);
+      const res1 = await Axios.get("/api/amenity");
+      this.allAmenities = res1.data;
     } catch (err) {
       console.log(err);
     }

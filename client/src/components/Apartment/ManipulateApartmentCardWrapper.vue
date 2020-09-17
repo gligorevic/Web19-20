@@ -2,12 +2,17 @@
   <div class="col s4">
     <div class="wraper">
       <div class="cardToolbar">
-        <span class="iconStyle redc">
+        <span class="iconStyle redc" @click="deleteApartmentMethod">
           <i class="material-icons">delete</i>
         </span>
-        <span class="iconStyle yellowc">
+        <router-link
+          class="iconStyle yellowc"
+          :to="'/apartment/' + apartment.id + '/edit'"
+          tag="span"
+          exact
+        >
           <i class="material-icons">edit</i>
-        </span>
+        </router-link>
         <div class="switch" style="flex-grow: 1;">
           <label>
             <input type="checkbox" @input="changeActive" :checked="status == 'ACTIVE'" />
@@ -31,9 +36,10 @@
 <script>
 import ApartmentCard from "./ApartmentCard";
 import Axios from "axios";
+import { eventBus } from "../../main";
 
 export default {
-  props: ["apartment"],
+  props: ["apartment", "deleteApartment"],
   data() {
     return {
       status: this.apartment.status,
@@ -43,6 +49,18 @@ export default {
     AppApartmentCard: ApartmentCard,
   },
   methods: {
+    async deleteApartmentMethod() {
+      try {
+        await Axios.delete(`/api/apartment/${this.apartment.id}`);
+        this.deleteApartment(this.apartment.id);
+        eventBus.showMessage({
+          message: "Successfully deleted apartment",
+          type: "success",
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async changeActive(e) {
       try {
         if (e.target.checked) {

@@ -3,6 +3,7 @@ package dto;
 import java.util.List;
 
 import domain.Address;
+import domain.Amenity;
 import domain.Apartment;
 import domain.Status;
 import domain.Type;
@@ -17,6 +18,7 @@ public class ApartmentCardDTO {
 	private float pricePerNight;
 	private Address address;
 	private Status status;
+	private List<Amenity> amenities;
 	
 	public ApartmentCardDTO() {
 	}
@@ -31,6 +33,7 @@ public class ApartmentCardDTO {
 		this.pricePerNight = a.getPricePerNight();
 		if(a.getLocation() != null) this.address = a.getLocation().getAddress();
 		this.status = a.getStatus();
+		this.amenities = a.getAmenities();
 	}
 
 	public Long getId() {
@@ -104,6 +107,14 @@ public class ApartmentCardDTO {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
+
+	public List<Amenity> getAmenities() {
+		return amenities;
+	}
+
+	public void setAmenities(List<Amenity> amenities) {
+		this.amenities = amenities;
+	}
 	
-		
+	
 }

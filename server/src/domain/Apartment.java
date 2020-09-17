@@ -154,4 +154,19 @@ public class Apartment implements iIdentifiable<Long> {
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
 	}
+
+	public void changeObject(Apartment apartment) {
+		this.name = apartment.getName();
+		this.type = apartment.getType();
+		this.roomNumber = apartment.getRoomNumber();
+		this.guestNumber = apartment.getGuestNumber();
+		this.location = apartment.getLocation();
+		this.startDate = apartment.getStartDate();
+		this.endDate = apartment.getEndDate();
+		this.pricePerNight = apartment.getPricePerNight();
+		this.checkInTime = apartment.getCheckInTime();
+		this.checkOutTime = apartment.getCheckOutTime();
+		this.amenities = apartment.getAmenities();
+	}
+
 }

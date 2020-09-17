@@ -23,6 +23,20 @@
           v-if="isUserHost"
         >My apartments</router-link>
         <router-link
+          to="/allApartments"
+          tag="li"
+          active-class="active"
+          exact
+          v-if="isUserAdmin"
+        >All apartments</router-link>
+        <router-link
+          to="/amenities"
+          tag="li"
+          active-class="active"
+          exact
+          v-if="isUserAdmin"
+        >Amenities</router-link>
+        <router-link
           to="/users"
           tag="li"
           active-class="active"
@@ -84,6 +98,9 @@ export default {
   computed: {
     isUserHost() {
       return eventBus.currentUser.role === "HOST";
+    },
+    isUserAdmin() {
+      return eventBus.currentUser.role === "ADMIN";
     },
   },
 };

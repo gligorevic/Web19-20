@@ -3,6 +3,7 @@ package controller;
 import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -19,6 +20,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import domain.Apartment;
 import domain.Role;
+import dto.SearchApartmentDTO;
 import exception.CustomException;
 import security.Secured;
 import service.ApartmentService;
@@ -49,7 +51,7 @@ public class ApartmentController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllApartments() {
 		try {
-			return Response.ok().entity(apartmentService.getAllApartmentById()).build();
+			return Response.ok().entity(apartmentService.getAllApartments()).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
@@ -57,6 +59,19 @@ public class ApartmentController {
 
 	}
 
+	@GET
+	@Path("/admin/all")
+	@Secured({Role.ADMIN})
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllApartmentsByAdmin() {
+		try {
+			return Response.ok().entity(apartmentService.getAllApartmentsByAdmin()).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+
+	}
 
 	@GET
 	@Path("/{id}")
@@ -86,13 +101,57 @@ public class ApartmentController {
 	}
 	
 	@PUT
+	@Path("/{id}")
+	@Secured({ Role.HOST, Role.ADMIN })
+	public Response editApartment(@PathParam("id") Long id, @FormDataParam("apartment") Apartment apartment, @FormDataParam("file") List<FormDataBodyPart> files, @HeaderParam("Authorization") String token) {
+		try {
+			return Response.ok().entity(apartmentService.editApartment(id, apartment, files, token)).build();
+		} catch (CustomException e) {
+			return Response.status(e.getStatus()).entity(e.getMessage()).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+
+	}
+	
+	@PUT
 	@Path("/{id}/status")
-	@Secured({ Role.HOST })
+	@Secured({ Role.HOST, Role.ADMIN })
 	public Response changeApartmentStatus(@PathParam("id") Long id, String status, @HeaderParam("Authorization") String token) {
 		try {
 			return Response.ok().entity(apartmentService.changeApartmentStatus(id, status, token)).build();
 		} catch (CustomException e) {
 			return Response.status(e.getStatus()).entity(e.getMessage()).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+
+	}
+	
+	@DELETE
+	@Path("/{id}")
+	@Secured({ Role.HOST, Role.ADMIN })
+	public Response deleteApartment(@PathParam("id") Long id, String status, @HeaderParam("Authorization") String token) {
+		try {
+			return Response.ok().entity(apartmentService.deleteApartment(id, status, token)).build();
+		} catch (CustomException e) {
+			return Response.status(e.getStatus()).entity(e.getMessage()).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+
+	}
+	
+	@POST
+	@Path("/search")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createApartmenet(SearchApartmentDTO searchData) {
+		try {
+			return Response.ok().entity(apartmentService.searchApartments(searchData)).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();

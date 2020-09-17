@@ -96,6 +96,15 @@ export default {
 </script>
 
 <style scoped>
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+
 hr {
   border: 0;
   height: 1px;

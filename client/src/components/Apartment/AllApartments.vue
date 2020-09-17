@@ -1,16 +1,7 @@
 <template>
   <div class="container wrapper row">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-      <h2>My Apartments</h2>
-
-      <router-link
-        to="/addApartment"
-        tag="a"
-        exact
-        class="btn-floating btn-large waves-effect waves-light green"
-      >
-        <i class="material-icons">add</i>
-      </router-link>
+      <h2>All Apartments</h2>
     </div>
     <hr />
     <div class="col s12 row">
@@ -26,7 +17,6 @@
 
 
 <script>
-import { eventBus } from "../../main";
 import Axios from "axios";
 import ApartmentCard from "./ManipulateApartmentCardWrapper";
 
@@ -46,9 +36,7 @@ export default {
   },
   async created() {
     try {
-      const res = await Axios.get(
-        `/api/apartment/user/${eventBus.currentUser.id}`
-      );
+      const res = await Axios.get(`/api/apartment/admin/all`);
       console.log(res);
       this.apartments = res.data;
     } catch (err) {

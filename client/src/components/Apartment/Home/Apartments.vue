@@ -11,23 +11,12 @@
 </template>
 
 <script>
-import Axios from "axios";
 import ApartmentCard from "./ApartmentResWraper";
 
 export default {
+  props: ["apartments"],
   components: {
     AppApartmentCard: ApartmentCard,
-  },
-  data() {
-    return { apartments: [] };
-  },
-  async beforeCreate() {
-    try {
-      const res = await Axios.get("/api/apartment");
-      this.apartments = res.data;
-    } catch (err) {
-      console.log(err);
-    }
   },
 };
 </script>
