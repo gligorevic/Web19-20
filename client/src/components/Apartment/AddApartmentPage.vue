@@ -9,16 +9,31 @@
         <h5>Location:</h5>
         <div class="row">
           <div class="input-field col s6">
-            <input id="country" type="text" class="validate" v-model="location.address.country" />
+            <input
+              id="country"
+              type="text"
+              class="validate"
+              v-model="location.address.country"
+            />
             <label for="country">Country</label>
           </div>
           <div class="input-field col s6">
-            <input id="city" type="text" class="validate" v-model="location.address.city" />
+            <input
+              id="city"
+              type="text"
+              class="validate"
+              v-model="location.address.city"
+            />
             <label for="city">City</label>
           </div>
 
           <div class="input-field col s6">
-            <input id="street" type="text" class="validate" v-model="location.address.street" />
+            <input
+              id="street"
+              type="text"
+              class="validate"
+              v-model="location.address.street"
+            />
             <label for="street">Street</label>
           </div>
           <div class="input-field col s3">
@@ -42,11 +57,21 @@
             <label for="postal">Postal</label>
           </div>
           <div class="input-field col s6">
-            <input id="latitude" type="number" class="validate" v-model="location.latitude" />
+            <input
+              id="latitude"
+              type="number"
+              class="validate"
+              v-model="location.latitude"
+            />
             <label for="latitude">Latitude</label>
           </div>
           <div class="input-field col s6">
-            <input id="longitude" type="number" class="validate" v-model="location.longitude" />
+            <input
+              id="longitude"
+              type="number"
+              class="validate"
+              v-model="location.longitude"
+            />
             <label for="longitude">Longitude</label>
           </div>
         </div>
@@ -56,7 +81,12 @@
         <h5>Apartment info:</h5>
         <div class="row">
           <div class="input-field col s12">
-            <input id="name" type="text" class="validate" v-model="apartment.name" />
+            <input
+              id="name"
+              type="text"
+              class="validate"
+              v-model="apartment.name"
+            />
             <label for="name">Name</label>
           </div>
           <div class="row col s12">
@@ -72,7 +102,13 @@
               <label for="apartment">Apartment</label>
             </div>
             <div class="col s4">
-              <input name="group1" type="radio" id="room" value="ROOM" v-model="apartment.type" />
+              <input
+                name="group1"
+                type="radio"
+                id="room"
+                value="ROOM"
+                v-model="apartment.type"
+              />
               <label for="room">Room</label>
             </div>
           </div>
@@ -114,11 +150,21 @@
         <h5>Dates:</h5>
         <div class="row">
           <div class="input-field col s6">
-            <input id="startDate" type="date" v-model="apartment.startDate" :min="today" />
+            <input
+              id="startDate"
+              type="date"
+              v-model="apartment.startDate"
+              :min="today"
+            />
             <label for="startDate" class="active">Start date</label>
           </div>
           <div class="input-field col s6">
-            <input id="endDate" type="date" v-model="apartment.endDate" :min="apartment.startDate" />
+            <input
+              id="endDate"
+              type="date"
+              v-model="apartment.endDate"
+              :min="apartment.startDate"
+            />
             <label for="endDate" class="active">End date</label>
           </div>
         </div>
@@ -128,20 +174,37 @@
         <h5>Checkin/out:</h5>
         <div class="row">
           <div class="input-field col s6">
-            <input id="checkInTime" type="time" v-model="apartment.checkInTime" />
+            <input
+              id="checkInTime"
+              type="time"
+              v-model="apartment.checkInTime"
+            />
             <label for="checkInTime" class="active">Checkin</label>
           </div>
           <div class="input-field col s6">
-            <input id="checkOutTime" type="time" v-model="apartment.checkOutTime" />
+            <input
+              id="checkOutTime"
+              type="time"
+              v-model="apartment.checkOutTime"
+            />
             <label for="checkOutTime" class="active">Checkout</label>
           </div>
         </div>
       </div>
       <div class="col s4 formPart">
         <h5>Amenities:</h5>
-        <div v-for="amenity in allAmenities" :key="amenity.name" style="text-align: left;">
-          <input type="checkbox" :value="amenity.name" :id="amenity.name" @input="setAmenities" />
-          <label :for="amenity.name">{{amenity.name}}</label>
+        <div
+          v-for="amenity in allAmenities"
+          :key="amenity.name"
+          style="text-align: left;"
+        >
+          <input
+            type="checkbox"
+            :value="amenity.name"
+            :id="amenity.name"
+            @input="setAmenities"
+          />
+          <label :for="amenity.name">{{ amenity.name }}</label>
         </div>
       </div>
       <div class="col s1" style="width: 20px;"></div>
@@ -169,14 +232,18 @@
         </div>
       </div>
       <div class="col s12">
-        <span class="message" v-if="isSomeFieldsEmpty">Fields can't stay empty!</span>
+        <span class="message" v-if="isSomeFieldsEmpty"
+          >Fields can't stay empty!</span
+        >
       </div>
       <div class="col s12">
         <button
           class="waves-effect waves-light btn blue lighten-2"
           @click.prevent="submit"
           :disabled="isSomeFieldsEmpty"
-        >Add apartment</button>
+        >
+          Add apartment
+        </button>
       </div>
     </form>
   </div>

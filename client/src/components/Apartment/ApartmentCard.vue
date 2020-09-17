@@ -1,21 +1,27 @@
 <template>
   <div>
-    <img :src="apartment.images && '/api/' + apartment.images[0]" class="coverImg" />
+    <img
+      :src="apartment.images && '/server/api/' + apartment.images[0]"
+      class="coverImg"
+    />
     <div class="apartmentInfo">
       <h5>{{ apartment.name }}</h5>
       <div class="flex-center">
         <i class="small material-icons">location_city</i>
-        <span
-          style="margin-left: 3px;"
-        >{{apartment.address.city}}, {{apartment.address.street}} {{apartment.address.houseNumber}}</span>
+        <span style="margin-left: 3px;"
+          >{{ apartment.address.city }}, {{ apartment.address.street }}
+          {{ apartment.address.houseNumber }}</span
+        >
       </div>
       <div class="flex-center">
         <i class="small material-icons">people</i>
-        <span style="margin-left: 3px;">Guests: {{apartment.guestNumber}}</span>
+        <span style="margin-left: 3px;"
+          >Guests: {{ apartment.guestNumber }}</span
+        >
       </div>
       <div class="flex-center">
         <i class="small material-icons">hotel</i>
-        <span style="margin-left: 3px;">Rooms: {{apartment.roomNumber}}</span>
+        <span style="margin-left: 3px;">Rooms: {{ apartment.roomNumber }}</span>
       </div>
     </div>
   </div>

@@ -17,6 +17,7 @@ if (jwt) {
     Axios.defaults.headers["Authorization"] = "Bearer " + jwt;
   }
 }
+Axios.defaults.baseURL = "/server/";
 
 export const eventBus = new Vue({
   data: {
@@ -35,6 +36,7 @@ export const eventBus = new Vue({
           "Bearer " + localStorage.getItem("jwt");
         this.currentUser = jwtDecode(localStorage.getItem("jwt"));
       }
+
       this.$emit("loggedInChanged");
     },
     showMessage: function(msgObject) {

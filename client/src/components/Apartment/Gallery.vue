@@ -1,25 +1,36 @@
 <template>
   <div>
     <div
-      v-for="(image,index) in images"
+      v-for="(image, index) in images"
       :key="image"
       class="imageBox"
       @click="showFullScreen(index)"
     >
-      <img :src="'/api/' + image" />
+      <img :src="'/server/api/' + image" />
     </div>
     <div v-if="zoomed" class="fullScreenMode">
       <div class="picWraper">
         <div class="iconOnImg closeIcon" @click="closeFullScreen">
           <i class="small material-icons">close</i>
         </div>
-        <div class="iconOnImg iconRight" @click="moveRight" v-if="imageIndex < images.length - 1">
+        <div
+          class="iconOnImg iconRight"
+          @click="moveRight"
+          v-if="imageIndex < images.length - 1"
+        >
           <i class="medium material-icons">keyboard_arrow_right</i>
         </div>
-        <div class="iconOnImg iconLeft" @click="moveLeft" v-if="imageIndex != 0">
+        <div
+          class="iconOnImg iconLeft"
+          @click="moveLeft"
+          v-if="imageIndex != 0"
+        >
           <i class="medium material-icons">keyboard_arrow_left</i>
         </div>
-        <img :src="'/api/' + images[imageIndex]" class="fullScreenImage" />
+        <img
+          :src="'/server/api/' + images[imageIndex]"
+          class="fullScreenImage"
+        />
       </div>
     </div>
   </div>
