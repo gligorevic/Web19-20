@@ -33,4 +33,13 @@ public class ReservationRepository extends UniversalRepository<Reservation, Long
 				.collect(Collectors.toList());
 	}
 
+	@Override
+	public List<Reservation> findReservationsForApartment(Long apartmentId) {
+		List<Reservation> reservations = new ArrayList<Reservation>(findAll());
+		
+		return reservations.stream()
+				.filter(a -> a.getReservedApartment().getId() == apartmentId)
+				.collect(Collectors.toList());
+	}
+
 }

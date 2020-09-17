@@ -2,6 +2,8 @@ package service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -45,6 +47,24 @@ public class ReservationService {
 		}else {
 			return db.getReservationRepository().findReservationsByUserApartment(apartmetnIds);
 		}
+	}
+	
+	public List<Date> getAllDatesForApartment(Long id , String token) {
+		List<Reservation> reservations = db.getReservationRepository().findReservationsForApartment(id);
+		List<Date> dates = new ArrayList<Date>();
+		
+		for(Reservation res : reservations) {
+			for(int i = 0 ; i < res.getNightsNum(); i++) {
+				Calendar c = Calendar.getInstance();
+				c.setTime(res.getStartReservationDate());
+				c.add(Calendar.DATE, i);
+				dates.add(c.getTime());
+			}
+				
+		}
+		
+		return dates;
+		
 	}
 	
 	public Reservation changeReservationStatus(String status,Long id,String token) throws CustomException {

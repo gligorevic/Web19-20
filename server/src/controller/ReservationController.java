@@ -36,6 +36,19 @@ public class ReservationController {
 		}
 	}
 	
+	@GET
+	@Path("/{id}")
+	@Secured({Role.GUEST})
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllDatesForApartemnt(@PathParam("id") Long id, @HeaderParam("Authorization") String token) {
+		try {
+			return Response.ok().entity(reservationService.getAllDatesForApartment(id ,token)).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+	}
+	
 	@POST
 	@Secured({Role.GUEST})
 	@Produces(MediaType.APPLICATION_JSON)

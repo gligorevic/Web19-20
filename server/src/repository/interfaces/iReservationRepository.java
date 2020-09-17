@@ -9,4 +9,6 @@ public interface iReservationRepository<E extends iIdentifiable<ID>, ID> extends
 	List<E> findReservationsByUserId(Long id);
 	
 	List<E> findReservationsByUserApartment(List<Long> apartmentIds);
+	
+	List<E> findReservationsForApartment(Long apartmentId);
 }

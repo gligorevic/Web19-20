@@ -13,6 +13,7 @@
     </div>
     <transition name="slide" type="animation" mode="out-in">
       <create-reservation-page
+      :datesRes="datesRes"
       :closeDialog=closeDialog
       :apartment="apartment"
       v-if="showReservationForm">
@@ -34,6 +35,7 @@ export default {
     apartment: null,
     showReservationForm: false, 
     comments: [],
+    datesRes:[],
     } 
   },
   methods: {
@@ -66,6 +68,14 @@ export default {
       const res = await Axios.get("/api/comments/" +this.$route.params.id);
       this.comments = res.data;
     } catch (err) {
+      console.log(err);
+    }
+    try{
+      const result = await Axios.get("/api/reservations/" + this.$route.params.id)
+      for(var x in result.data){
+        this.datesRes.push(new Date(parseInt(result.data[x],10)))
+      }
+    }catch(err){
       console.log(err);
     }
  }

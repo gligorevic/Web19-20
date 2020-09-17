@@ -10,9 +10,10 @@
           <div>
               <datepicker 
               placeholder="Select Date" 
-              v-model="date" 
+              v-model="state.date" 
               inline
-              value="date">
+              :selected-date="state.date"
+              :disabled-dates="state.disabledDates">
               </datepicker>
           </div>
           <div class="row">
@@ -57,11 +58,17 @@ import Datepicker from 'vuejs-datepicker';
 
 
 export default {
-  props:["closeDialog" , "apartment"],
+  props:["closeDialog" , "apartment" , "datesRes"],
 
   data(){
     return{ 
-      date: new Date().now,
+      state:{
+       date: new Date(),
+        disabledDates:{
+          to:new Date(),
+          dates: this.datesRes,
+        }
+      },
       reservation:{
         apartmentId:  "",
         startReservationDate: "",
@@ -79,7 +86,7 @@ export default {
   methods: {
     async submit() {
       try{
-        this.reservation.startReservationDate = this.date.toISOString().split("T")[0];
+        this.reservation.startReservationDate = this.state.date.toISOString().split("T")[0];
         this.reservation.nightsNum = parseInt(this.reservation.nightsNum);
         this.reservation.price = this.calculatePrice;
         await Axios.post(`/api/reservations`, this.reservation);
