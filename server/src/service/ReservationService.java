@@ -101,8 +101,12 @@ public class ReservationService {
 			e.printStackTrace();
 			System.out.println("Date formatting failed.");
 		}
-		reservation.setReservedApartment(db.getApartmentRepository().findById(newReservation.getApartmentId()));
+		if(checkReservationDate(newReservation, reservation.getStartReservationDate())) {
+			throw new CustomException("You have selected dates that are not available.", Status.BAD_REQUEST);
+		}
 		
+		
+		reservation.setReservedApartment(db.getApartmentRepository().findById(newReservation.getApartmentId()));
 		reservation.setGuest(db.getUserRepository().findById(newReservation.getGuestId()));
 		
 		Reservation saved = db.getReservationRepository().save(reservation);
@@ -110,6 +114,48 @@ public class ReservationService {
 		saved.getReservedApartment().setHost(null);
 		return saved;
 		
+	}
+	
+	private Boolean checkReservationDate(ReservationDTO newReservation , Date date) {
+		List<Reservation> reservations = db.getReservationRepository()
+										.findReservationsForApartment(newReservation.getApartmentId())
+										.stream()
+										.filter(r -> r.getReservationStatus() == ReservationStatus.ACCEPTED)
+										.collect(Collectors.toList());
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		
+		List<String> datesOccupied = new ArrayList<String>();
+		
+		for(Reservation res : reservations) {
+			for(int i = 0 ; i < res.getNightsNum(); i++) {
+				Calendar c = Calendar.getInstance();
+				c.setTime(res.getStartReservationDate());
+				c.add(Calendar.DATE, i);
+				try {
+					String s = formatter.format(c.getTime());
+					datesOccupied.add(s);
+				}catch(Exception e) {
+						e.printStackTrace();
+						System.out.println("Date formatting failed.");
+			}
+		}
+	}		
+		for(int j = 0 ; j < newReservation.getNightsNum() ; j++) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			cal.add(Calendar.DATE, j );
+			try {
+				String s = formatter.format(cal.getTime());
+				if(datesOccupied.contains(s))
+					return true;
+			}catch(Exception e) {
+				e.printStackTrace();
+				System.out.println("Date formatting failed.");
+			}
+		}
+		
+		
+	return false;
 	}
 	
 }
