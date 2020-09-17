@@ -93,15 +93,22 @@
 </template>
 
 <script>
-import reservations from '@/mock/mockRes'
+import Axios from "axios";
 
 export default {
   data(){
     return{
-      reservations,
+      reservations: [],
       search:'',
       sort:'',
       statusFilter:[],
+    }
+  },
+  async created() {
+    try {
+      Axios.get(`/api/reservations`).then(response => this.reservations = response.data)
+    } catch (err) {
+      console.log(err);
     }
   },
   methods: {

@@ -1,6 +1,7 @@
 package domain;
 
 import domain.interfaces.iIdentifiable;
+import dto.CommentDTO;
 
 public class Comment implements iIdentifiable<Long> {
 	private Long id;
@@ -8,7 +9,18 @@ public class Comment implements iIdentifiable<Long> {
 	private Apartment apartment;
 	private String text;
 	private int grade;
+	private Long reservationId;
+	private Boolean showComment = false;
 	private Boolean deleted;
+	
+	public Comment() {
+		
+	}
+	public Comment(CommentDTO dto) {
+		this.text = dto.getText();
+		this.reservationId = dto.getReservationId();
+		this.grade = dto.getGrade();
+	}
 	
 	@Override
 	public Long getId() {
@@ -20,6 +32,23 @@ public class Comment implements iIdentifiable<Long> {
 		this.id = id;
 	}
 	
+	
+	public Boolean getShowComment() {
+		return showComment;
+	}
+
+	public void setShowComment(Boolean showComment) {
+		this.showComment = showComment;
+	}
+
+	public Long getReservationId() {
+		return reservationId;
+	}
+
+	public void setReservationId(Long reservationId) {
+		this.reservationId = reservationId;
+	}
+
 	public User getGuest() {
 		return guest;
 	}

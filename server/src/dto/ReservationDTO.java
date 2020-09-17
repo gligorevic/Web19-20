@@ -3,13 +3,12 @@ package dto;
 public class ReservationDTO {
 	
 	private Long apartmentId;
-	private String startReservationDate;
+	private Long guestId;
 	private Integer nightsNum;
 	private float price;
 	private String reservationMessage;
-	private Long guestId;
 	private String reservationStatus;
-	
+	private String startReservationDate;
 	
 	public ReservationDTO() {
 		

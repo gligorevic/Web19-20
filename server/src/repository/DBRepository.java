@@ -2,6 +2,7 @@ package repository;
 
 import domain.Amenity;
 import domain.Apartment;
+import domain.Comment;
 import domain.Reservation;
 import domain.User;
 import repository.streams.JSONFileStream;
@@ -11,12 +12,21 @@ public class DBRepository {
 	private ApartmentRepository apartmentRepository;
 	private AmenityRepository amenityRepository;
 	private ReservationRepository reservationRepository;
+	private CommentRepository commentRepository;
 	
 	public DBRepository() {
 		initUserRepository();
 		initApartmentRepository();
 		initAmenityRepository();
 		initReservationRepository();
+		initCommentRepository();
+	}
+	
+	private void initCommentRepository() {
+		JSONFileStream<Comment> jsonFileStream = new JSONFileStream<Comment>("comments.txt", Comment.class);
+		LongIdGenerator lidgen = new LongIdGenerator();
+		lidgen.initializeId(Long.valueOf(jsonFileStream.readAll().size()));
+		this.commentRepository = new CommentRepository(jsonFileStream, lidgen);
 	}
 
 	private void initAmenityRepository() {
@@ -61,5 +71,8 @@ public class DBRepository {
 	
 	public AmenityRepository getAmenityRepository() {
 		return this.amenityRepository;
+	}
+	public CommentRepository getCommentRepository() {
+		return this.commentRepository;
 	}
 }

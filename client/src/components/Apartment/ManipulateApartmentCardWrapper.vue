@@ -44,6 +44,7 @@ export default {
   },
   methods: {
     async changeActive(e) {
+      console.log(e)
       try {
         if (e.target.checked) {
           await Axios.put(

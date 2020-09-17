@@ -83,7 +83,7 @@ public class UserService {
 		return new UserDTO(user);
 	}
 
-	private Long getIdFromJWT(String token) {
+	public Long getIdFromJWT(String token) {
 		try {
 			Claims claims = Jwts.parser().setSigningKey(SecurityConstants.SECRET).parseClaimsJws(token.substring(7))
 					.getBody();

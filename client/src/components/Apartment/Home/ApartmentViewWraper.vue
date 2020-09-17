@@ -1,8 +1,24 @@
 <template>
   <div class="container">
     <app-apartment-details :apartment="apartment" v-if="apartment"></app-apartment-details>
-    <app-comments></app-comments>
-    <app-reservations></app-reservations>
+    <div class="row">
+      <div v-if="apartment" class="col s4 offset-s4">
+        <button class="waves-effect waves-light btn resButton"
+        name="action"
+        @click="openReservationForm">
+        <i class="material-icons right">hotel</i>
+        <i class="material-icons left">hotel</i>
+        Make A Reservation</button>
+      </div>
+    </div>
+    <transition name="slide" type="animation" mode="out-in">
+      <create-reservation-page
+      :closeDialog=closeDialog
+      :apartment="apartment"
+      v-if="showReservationForm">
+      </create-reservation-page>
+    </transition>
+    <app-comments :comments="comments" v-if="apartment"></app-comments>
   </div>
 </template>
 
@@ -10,16 +26,32 @@
 import Axios from "axios";
 import ApartmentDetails from "../ApartmentDetails";
 import Comments from "./Comments";
-import Reservations from "./Reservations";
+import CreateReservationPage from "@/components/Reservation/CreateReservationPage.vue"
 
 export default {
   data() {
-    return { apartment: null };
+    return { 
+    apartment: null,
+    showReservationForm: false, 
+    comments: [],
+    } 
+  },
+  methods: {
+    openReservationForm() {
+      this.showReservationForm = true
+
+      document.querySelector("body").style.overflow = "hidden";
+      window.scrollTo(0, 0);
+    },
+    closeDialog() {
+      this.showReservationForm = false;
+      document.querySelector("body").style.overflow = "scroll";
+    },
   },
   components: {
     AppApartmentDetails: ApartmentDetails,
     AppComments: Comments,
-    AppReservations: Reservations,
+    CreateReservationPage: CreateReservationPage,
   },
   async beforeCreate() {
     try {
@@ -29,9 +61,24 @@ export default {
       console.log(err);
     }
   },
+  async created() {
+    try {
+      const res = await Axios.get("/api/comments/" +this.$route.params.id);
+      this.comments = res.data;
+    } catch (err) {
+      console.log(err);
+    }
+ }
+  
 };
 </script>
 
 
 <style scoped>
+
+.resButton{
+  display:block;
+  width: 100%;
+}
+
 </style>
