@@ -82,6 +82,14 @@ public class ReservationService {
 		if(status.equals("WITHDRAWN") && userService.getIdFromJWT(token) != reservation.getGuest().getId())
 			throw new CustomException("Unauthorized", Status.UNAUTHORIZED);
 		
+		if(status.equals("ACCEPTED")) {
+			ReservationDTO dto = new ReservationDTO();
+			dto.setApartmentId(reservation.getReservedApartment().getId());
+			dto.setNightsNum(reservation.getNightsNum());
+			if(checkReservationDate(dto, reservation.getStartReservationDate())) {
+				throw new CustomException("Dates are no longer available.", Status.BAD_REQUEST);
+			}
+		}
 		
 		reservation.setReservationStatus(status);
 		db.getReservationRepository().update(reservation);

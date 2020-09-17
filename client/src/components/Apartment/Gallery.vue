@@ -67,7 +67,7 @@ export default {
 
 <style scoped>
 .fullScreenMode {
-  position: absolute;
+  position: fixed;
   top: 500px;
   left: 0;
   top: 0;

@@ -55,8 +55,12 @@
                 </div>
                 <div class="col s3">
                   <u>Apartment info:</u>
+                  <br/>
+                  Apartment name: {{res.reservedApartment.name}}
                   <br />
                   Room number: {{res.reservedApartment.roomNumber}}
+                  <br />
+                  Date: {{res.startReservationDate}}
                   <br />
                   Number of nights : {{res.nightsNum}}
                   <br />
@@ -65,6 +69,9 @@
                 <div class="col s3">
                   <u>Reservation info:</u>
                   <br />
+                  Date: {{new Date(res.startReservationDate)
+                                              .toISOString()
+                                              .split("T")[0]}}
                   <br />
                   Status: {{res.reservationStatus}}
                   <br />Total price:

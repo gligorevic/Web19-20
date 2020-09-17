@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper">
     <img
       :src="apartment.images && '/server/api/' + apartment.images[0]"
       class="coverImg"
@@ -37,6 +37,10 @@ export default {
 </script>
 
 <style scoped>
+.wrapper{
+  width:100%;
+}
+
 .coverImg {
   max-width: 100%;
   opacity: 0.8;

@@ -123,7 +123,7 @@ export default {
       document.querySelector("body").style.overflow = "scroll";
     },
     closeDialogAndUpdateState(newUserData) {
-      this.userData = { ...this.users, ...newUserData };
+      this.userData = this.users.push(newUserData)
       this.closeDialog();
     },
   },

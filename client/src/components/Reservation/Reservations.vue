@@ -60,6 +60,8 @@
                      <div class="col s3">
                        Apartment info:
                        <br/>
+                       Apartment name: {{res.reservedApartment.name}}
+                       <br/>
                        Room number: {{res.reservedApartment.roomNumber}}
                        <br/>
                        Number of nights : {{res.nightsNum}}
@@ -67,22 +69,17 @@
                        Price per night : ${{res.reservedApartment.pricePerNight}}
                     </div>
                     <div class="col s3">
-                      Pricing:
-                      <br/>
-                      <br/>
-                      <br/>
-                      <br/>
-                      <b>
-                      Total: ${{res.price}}
-                      </b>
-                    </div>
-                    <div class="col s3">
-                      <br/>
-                      <br/>
-                      <br/>
-                      <br/>
+                      <u>Reservation info:</u>
+                      <br />
+                      Date: {{new Date(res.startReservationDate)
+                                                  .toISOString()
+                                                  .split("T")[0]}}
+                      <br />
                       Status: {{res.reservationStatus}}
+                      <br />Total price:
+                      <b>${{res.price}}</b>
                     </div>
+                   
                   </div>
               </div>
             </div>

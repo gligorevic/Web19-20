@@ -55,6 +55,8 @@
                 </div>
                 <div class="col s3">
                   <u>Apartment info:</u>
+                  <br/>
+                  Apartment name: {{res.reservedApartment.name}}
                   <br />
                   Room number: {{res.reservedApartment.roomNumber}}
                   <br />
@@ -65,6 +67,9 @@
                 <div class="col s3">
                   <u>Reservation info:</u>
                   <br />
+                  Date: {{new Date(res.startReservationDate)
+                                                .toISOString()
+                                                .split("T")[0]}}
                   <br />
                   Status: {{res.reservationStatus}}
                   <br />Total price:
@@ -120,10 +125,11 @@ export default {
   methods: {
     async changeStatus(id, status) {
       try {
+        
+        await Axios.put(`/api/reservations/${id}/status`, status);
         this.reservations = this.reservations.map((res) =>
           res.id != id ? res : { ...res, reservationStatus: status }
         );
-        await Axios.put(`/api/reservations/${id}/status`, status);
 
         eventBus.showMessage({
           message: "You have successfully changed reservation status !",
