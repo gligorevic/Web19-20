@@ -55,12 +55,13 @@ public class CommentService {
 		
 		List<Comment> comments = db.getCommentRepository().findCommentsByApartmentId(apartmentId);
 		
-		if(user.getRole() == Role.GUEST) 
-			comments.stream().filter(c -> c.getShowComment() == true)
+		if(user.getRole() == Role.GUEST) {
+			List<Comment> filtered = comments.stream().filter(c -> c.getShowComment() == true)
 							 .collect(Collectors.toList());	
-			
+			return filtered;
+		}else {	
 		return comments;
-		
+		}
 	}
 	
 }

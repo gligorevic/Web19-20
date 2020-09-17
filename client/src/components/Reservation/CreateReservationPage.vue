@@ -11,7 +11,8 @@
               <datepicker 
               placeholder="Select Date" 
               v-model="date" 
-              inline>
+              inline
+              value="date">
               </datepicker>
           </div>
           <div class="row">
@@ -19,8 +20,8 @@
             <textarea v-model="reservation.reservationMessage"
              class="textarea" 
              id="textarea" 
-             name="textarea" r
-             ows="6" 
+             name="textarea" 
+             rows="6" 
              cols="50" >
             </textarea>
           </div>  
@@ -78,7 +79,7 @@ export default {
   methods: {
     async submit() {
       try{
-        this.reservation.startReservationDate = "2020-11-11";
+        this.reservation.startReservationDate = this.date.toISOString().split("T")[0];
         this.reservation.nightsNum = parseInt(this.reservation.nightsNum);
         this.reservation.price = this.calculatePrice;
         await Axios.post(`/api/reservations`, this.reservation);

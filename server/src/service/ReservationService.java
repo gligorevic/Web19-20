@@ -84,7 +84,8 @@ public class ReservationService {
 		reservation.setGuest(db.getUserRepository().findById(newReservation.getGuestId()));
 		
 		Reservation saved = db.getReservationRepository().save(reservation);
-		
+		saved.setGuest(null);
+		saved.getReservedApartment().setHost(null);
 		return saved;
 		
 	}
